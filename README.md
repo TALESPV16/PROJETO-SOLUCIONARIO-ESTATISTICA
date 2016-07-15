@@ -7,7 +7,7 @@ DATA: 15 de Julho de 2016
 
 Este repositório contém uma gama de questões dos principais assuntos de estatística abordados em disciplinas diversas ministradas, tanto em universidades publicas tais como a UFBA, como em universidades particulares, bem como a solução dessas questões. Ou seja, trata-se de um solucionário de questões, no qual são abordados assuntos essenciais para criar uma base sólida sobre a disciplina Estatística.
 
-Este trabalho reúne esforços do grupo Gamma, o qual é composto pelos integrantes
+Este trabalho reúne esforços do grupo GAMA, o qual é composto pelos integrantes
 
 1. Adelmo Menezes
 2. Felipe
