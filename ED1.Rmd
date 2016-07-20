@@ -1,8 +1,7 @@
 ---
-output: pdf_document
+output: html_document
 ---
 #ESTATÍSTICA DESCRITIVA
-
 ```{r, include=FALSE}
 library("mime")
 library("stringi")
@@ -57,12 +56,12 @@ gr1 <- sapply(X = c("Cham1","Cham2","Cham3","Cham4"), FUN <- function(s) {
 par(mfrow = c(1,1))
 boxplot(LQED1)
 ```
+
 a) Complete o quadro das estatísticas descritivas destes dados.
 b) Compare as distribuições quanto à simetria com base nos gráficos acima.
 c) Que chaminé apresenta maior variação relativa? Analise criticamente sua resposta.
 d) As estatísticas calculadas podem ser utilizadas para descrever o comportamento dos dados?
 
-\newpage
 ### Resposta letra a)
 ```{r, results= 'asis'}
 tb <- fdt(LQED1)
@@ -79,8 +78,6 @@ knitr::kable(resumo, align = 'c')
 Utilizou-se a função **sapply()** para realizar o cálculo dos parâmetros estatísticos para cada coluna. Utilizou-se a função **sapply()** para o cálculo do desvio padrão, que usa como argumento a função **sd()** para cada coluna. Transformou-se o objeto sddf para o tipo dataframe com a função **data.frame()**, mostrando todos as estatísticas requeridas. Os valores do dataframe foram arredondados para até 4 significativos com a função **round()**.
 
 ### Resposta letra b)
-
-**Plotando os histogramas**
 ```{r, fig.height = 8, fig.width = 11}
 par(mfrow = c(2,2))
 gr2 <- sapply(X = c("Cham1","Cham2","Cham3","Cham4"), FUN=function(s) {
@@ -90,38 +87,36 @@ gr2 <- sapply(X = c("Cham1","Cham2","Cham3","Cham4"), FUN=function(s) {
 ```
 
 ```{r, results= 'asis'}
-Cvar <- sapply(LQED1, cv)
-Coefvar <- round(Cvar,2)
 kurt <- sapply(LQED1, kurtosis) # Curtose
 kurt <- round(kurt,2)
 skwns <- sapply(LQED1, skewness) # Assimetria
 skwns <- round(skwns,2)
 percentl <- sapply(LQED1, quantile)
 percentl <- round(percentl,2)
-otprm <- rbind(Coefvar, kurt, skwns, percentl)
+otprm <- rbind(kurt, skwns, percentl)
 resumo <- rbind(otprm, make.row.names = TRUE, stringsAsFactors=
                 default.stringsAsFactors())
 knitr::kable(resumo, align = 'c')
 ```
 
-Os gráficos e a tabela acima evidenciam que: para a Chaminé 1 e Chaminé 2 temos assimetria leve à direita como pode também ser notado pela variáveis skwns. Para a Chaminé 3 existem uma maior quantidade de leituras para valores mais baixos de concentração de monóxido de carbono, ou seja, existe uma assimetria à esquerda, com valor de skwns igual à -1,73, já a Chaminé 4 tem assimetria nula (skwns = 0), isso indica que a distribuição é normal ou simétrica.
+Não é possível inferir sobre simetria utilizando gráficos de série temporal. Usando somente boxplots também não é possível concluir sobre simetria. Para tanto, construiu-se histográmas (acima) para auxiliar a interpretação dos dados. Nota-se que o histograma da Chaminé 2 apresenta uma distribuição bimodal, não identificada no boxplot da mesma. Portanto, para identificação de assimetria os gráficos fornecidos na questão para a Chaminé 2 são insuficientes. Para as demais chaminés (1, 3 e 4) os histogramas evidenciam distribuições unimodais. Desta forma, os boxplots destas chaminés podem ser utilizados para inferir sobre assimetria, ressaltando que na chaminé 3 são observados três outliers. Conclui-se que a distribuição da chaminé 1 possui assimetria positiva (a direita) devido comprimento da linha acima do terceiro Quartil (Q3) do boxplot ser maior que a linha abaixo do primeiro Quartil (Q1). O parâmetro skwns da tabela acima confirma a assimetria a direita devido ao seu valor positivo (0.24). Já a chaminé 4 apresenta distribuição uniforme e sem assimetria, devido ao posicionamento da mediana no centro da distribuição. O parâmetro skwns da tabela acima confirma a assimetria nula para a chaminé 4. Observando a mediana do boxplot da chaminé 3 nota-se a sua proximidade com o terceiro quartil, portanto a distribuição apresenta assimetria a esquerda. O parâmetro skwns da tabela acima confirma a assimetria a esquerda devido ao seu valor negativo (-1.73)
 
 ###Resposta letra c)
+Ao olhar a tabela abaixo nota-se que a variável Cvar que corresponde ao Coeficiente de Variação Cv, está calculado para as quatro chaminés. Para a chaminé 2 o coeficiente de variação não representa a disperssão dos dados devido ao fato da distribuição ser bimodal. Como a chaminé 3 apresenta outliers, os mesmos devem ser avaliados devido a sua influência no cálculo do coeficiente de variação. A retirada dos outliers acarretariam a redução do desvio padrão dos dados e, por consequencia a redução do coeficiente de variação. Considerando a presença dos outliers os dados da chaminé 3 apresentam o maior coeficente de variação ou maior dispressão relativa. Por último, as chaminés 1 e 4 apresentam os menores coeficientes de variação, respectivamente. 
 
-Ao Olhar a tabela acima pode-se notar que a variável Coefvar que corresponde ao Coeficiente de Variação Cv, está calculado para as quatro chaminés. Observando os valores calculados podemos notar que há uma ordem crescente onde o Cv pode ser ordenado dessa forma Coefvar 5.21 > 11.07 > 11.84 > 12.71, ou seja, o coeficiente de variação que corresponde à dispersão relativa dos dados, ordena em ordem crescente as chaminés em termos de dispersão relativa dessa forma:
+```{r, results= 'asis'}
+Cvar <- round(sapply(LQED1, cv), 2)
+Coefvar <- data.frame(Cvar)
 
-```{r, include= FALSE }
-class <- matrix(c("Cham4",5.21,"Cham1", 11.07, "Cham3", 
-                  11.84, "Cham2", 12.71), nrow = 2)
+knitr::kable(Coefvar, align = 'c')
 ```
-```{r,results= 'asis'}
-knitr::kable(class, align = 'c')
-```
-
-Ou seja a Chaminé 2 tem a maior dispersão relativa ou o maior coeficiente de variação dos dados. 
 
 ###Resposta letra d)
-Não é possível usar as estatísticas para descrever os dados, pois a distribuição não é normal, e ainda na Chaminé 2, temos uma distribuição bimodal, ou seja, exisem duas médias, e a média global dessas duas ditribuições não representa a população. Os gráficos abaixos comparam a distribuição dos dados de cada chaminé, com a distribuição normal, podemos observar que a única chaminé que tem proximidade com a distribuição normal é a Cham4, por isso nesse caso não é possível usar as estatisticas para todas as chaminés.
+Não é possível usar todas as estatísticas calculadas para descrever os dados das quatro chaminés. Os dados da Chaminé 2 apresentam distribuição bimodal. Logo, as estatísticas calculadas (média e desvio padrão) para os dados desta chamniné não descrevem o comportamento bimodal.
+
+A presença de outliers e de assimetias são melhor identificadas através de gráficos (séries temporais, boxplots e histogramas), do que através das estatísticas média e desvia padrão.
+
+Os gráficos abaixos comparam a distribuição dos dados de cada chaminé com a distribuição normal. Nota-se: a proximidade das distribuições das chaminés 1 e 4 com a normal; a presença de duas distribuições nos dados da chaminé 2; e a presença de outliers da chaminé 3.
 
 ```{r, fig.height= 8, fig.width= 10, echo= FALSE}
 par(mfrow = c(2,2))
@@ -130,9 +125,4 @@ gr3 <- sapply(X = c("Cham1","Cham2","Cham3","Cham4"), FUN=function(s) {
                main = paste("Verificando a normalidade da",s), 
              pch = 18)
         qqline(LQED1[,s], col = "red")
-        })
-
-```
-
-
-\newpage
+        })```
