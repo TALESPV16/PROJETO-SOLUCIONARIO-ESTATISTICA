@@ -1,5 +1,0 @@
-Variavel	Media	Desvio	Minimo	Q1	Mediana	Q3	Maximo
-Cham1	48.68	5.39	40.5	44	50	53	59.5
-Cham2	49.81	6.33	41.64	NA	50	56.11	58.36
-Cham3	49.85	NA	35	50.45	52.45	53.3	53.9
-Cham4	48.5	2.52	44.5	46.25	NA	51.38	72.71
