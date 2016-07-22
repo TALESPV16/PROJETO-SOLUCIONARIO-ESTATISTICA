@@ -1,15 +1,50 @@
+---
+output: html_document
+---
+#ESTATÍSTICA DESCRITIVA
+```{r, include=FALSE}
+library("mime")
+library("stringi")
+library("magrittr") 
+library("Rcpp")
+library("evaluate")
+library("digest")
+library("formatR")
+library("highr")
+library("markdown")
+library("stringr")
+library("yaml")
+library("bitops")
+library("caTools")
+library("htmltools")
+library("knitr")
+library("rmarkdown")
+library("e1071")
+library("fBasics")
+library("DAAG")
+library("MASS")
+library("fdth")
+library("dplyr")
+library("moments")
+library("qcc")
+library("rafalib")
+library("reshape2")
+library("survey")
+library("raster")
+library("knitr")
+```
+
 ##QUESTÃO I2
 A tensão de ruptura dos cabos produzidos por um fabricante apresenta a média de 1800kg e o desvio padrão de 100kg. Mediante nova técnica no processo de fabricação, proclamou-se que a tensão de ruptura pode ter aumentado. Para testar essa declaração, ensaiou-se uma amostra de 50 cabos, tendo-se determinado a tensão média de ruptura de 1850kg.
 
 a)Pode-se confirmar a declaração com nível de significância 0,01?
 
 ###Resposta letra a)
-O teste Z, é utilizado, uma vez que n>30
-Ao nível de significância de 0,01, a regra de decisão é:
+Utilizou-se o teste Z, uma vez que n>30. Para o nível de significância de 0,01, a regra de decisão é:
 
 Rejeita-se $H_{0}$ se z > $z_{0,01}$ = 2,33
 
-Aceita-se $H_{0}$ se z < 2,33
+Falha-se em rejeitar $H_{0}$ se z < 2,33
 
 Desta forma as Hipóteses são:
 
@@ -33,23 +68,20 @@ z =\frac{(1850-1800)}{100 / \sqrt[2]{50}} = 3.55
 \end{aligned}
 $$
 
-**No R o cáculo acima é feito através dos comandos abaixos:**
-
+*O cógido abaixo reflete os cálculos apresentados acima.*
 ```{r}
-M = 1800
-dp = 100
-n = 50
-x = 1850
-alpha = 0.01
-z.alpha = abs(qnorm(alpha))
-z0 = (x - M) / (dp/sqrt(n))
+M     <- 1800
+dp    <- 100
+n     <- 50
+x     <- 1850
+alpha <- 0.01
+
+z.alpha <- abs(qnorm(alpha))
+z0      <- (x - M) / (dp/sqrt(n))
+
 if (z0 > z.alpha) {
   print("Rejeitar Hipótese Nula")
 } else {print("Falhar em Rejeitar Hipótese Nula")}
 ```
 
-*Sim. É possivel afirmar que a média da tensão de ruptura dos cabos aumentou, com 99% de chance, em todos os 
-intervalos considerados,para todas as amostras, pois a hipótese nula, a qual considera que a média é igual
-a 1800 kg, falhou em aceitar e, $z_{0}$ > $z_{\alpha}$*
-
-
+Sim. É possivel afirmar que a média da tensão de ruptura dos cabos aumentou, com 99% de confiança, em todos os intervalos considerados,para todas as amostras, pois a hipótese nula, a qual considera que a média é igual a 1800 kg, foi regeitada e, $z_{0}$ > $z_{\alpha}$.
