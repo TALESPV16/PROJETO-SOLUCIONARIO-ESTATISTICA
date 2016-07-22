@@ -7,9 +7,9 @@ a) Analise criticamente qual a influência da variabilidade dos dados no indicad
 
 ###Resposta letra a)
 
-*O gráfico de dispersão entre "Captação Total" e "Produção Total" não aparenta correlação significativaentre 
+*O gráfico de dispersão entre "Captação Total" e "Produção Total" não aparenta correlação significativa entre 
 as variáveis, pois a produção total tende a um valor constante idependente da variação da captação. 
-O gráfico de dispersão entre "Captação Total e "ICA" apresenta uma correlação linear indicando a significância 
-da predição de ICA a partir da captação. Diferentemente, o gráfico de dispesÃ£o entre "Produção Total e "ICA" 
+O gráfico de dispersão "Captação Total versus "ICA" apresenta uma correlação linear indicando a significância 
+da predição de ICA a partir da captação. Por outro lado, o gráfico de dispersão "Produção Total versus "ICA" 
 apresenta uma concentração de diferentes valores de ICA para a mesma produção total.*
 
