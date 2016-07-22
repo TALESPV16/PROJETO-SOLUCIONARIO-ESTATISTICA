@@ -1,7 +1,7 @@
 ---
 output: html_document
 ---
-#ESTATÍSTICA DESCRITIVA
+#INFERÊNCIA
 ```{r, include=FALSE}
 library("mime")
 library("stringi")
