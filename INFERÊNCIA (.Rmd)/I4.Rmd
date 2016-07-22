@@ -5,7 +5,6 @@ a) Escreva detalhadamente como maximizar n se o parâmetro $\pi$ é desconhecido
 
 ###Resposta letra a)
 ```{r}
-#NADA AINDA
+A resolução está na execução da primeira derivada desta função, e então obtém-se o valor máximo desta função.
 ```
 
-\newpage
