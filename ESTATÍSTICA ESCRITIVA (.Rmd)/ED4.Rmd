@@ -1,3 +1,39 @@
+---
+output: html_document
+---
+#ESTATÍSTICA DESCRITIVA
+```{r, include=FALSE}
+library("mime")
+library("stringi")
+library("magrittr") 
+library("Rcpp")
+library("evaluate")
+library("digest")
+library("formatR")
+library("highr")
+library("markdown")
+library("stringr")
+library("yaml")
+library("bitops")
+library("caTools")
+library("htmltools")
+library("knitr")
+library("rmarkdown")
+library("e1071")
+library("fBasics")
+library("DAAG")
+library("MASS")
+library("fdth")
+library("dplyr")
+library("moments")
+library("qcc")
+library("rafalib")
+library("reshape2")
+library("survey")
+library("raster")
+library("knitr")
+```
+
 ## QUESTÃO ED4
 Que características pretende-se realçar quando se representa um conjunto de dados sob a forma de um:
 
@@ -14,9 +50,6 @@ plot(d.norm, main = "Série Temporal", xlab = "Observação",
      ylab = "Valor", pch = 20, col = "red")
 ```
 
-*O histograma é utilizado para avaliar quanto à normalidade dos dados, ou se a distribuição é leptocúrtica, 
-platicúrtica ou mesocútica, ou seja quanto à curtose. E ainda é possível análisar quanto à assimetra, e 
-se a distribuição tem mais de uma moda ou não, ou seja, se é unimodal, bimodal, etc.*
-*Enquanto que o gráfico de série temporal permite a avaliação da dispersão, ou seja, é possível ter uma 
-idéia quanto ao coeficiente de variação dos dados, e ainda quanto à tendência, por exemplo de não linearidade.*
+O histograma procura avaliar a forma e a distribuição de dados amostrais, bem como a presença de assimetria (esquerda, normal ou direita) e/ou curtose (leptocúrtica, platicúrtica ou mesocútica) na distribuição. O histograma também possibilita a identificação de distribuições unimodais, bimodais, etc.
 
+O gráfico de séries temporais é usado para avaliar padrões e comportamento nos dados ao longo do tempo, sendo especialmente úteis na comparação de padrões de dados de diferentes grupos, identifiação de tendências e exibição da dispersão relativa dos dados. O mesmo também permite a identificação da aleatoriedade dos dados, premissa necessária para a consideração de normalidade dos dados.
