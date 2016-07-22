@@ -1,0 +1,4 @@
+Dia	A	B
+Seg	5	3
+Qua	7	5
+Sex	8	6
