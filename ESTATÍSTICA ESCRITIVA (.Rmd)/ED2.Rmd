@@ -1,60 +1,108 @@
+---
+output: html_document
+---
+#ESTATÍSTICA DESCRITIVA
+```{r, include=FALSE}
+library("mime")
+library("stringi")
+library("magrittr") 
+library("Rcpp")
+library("evaluate")
+library("digest")
+library("formatR")
+library("highr")
+library("markdown")
+library("stringr")
+library("yaml")
+library("bitops")
+library("caTools")
+library("htmltools")
+library("knitr")
+library("rmarkdown")
+library("e1071")
+library("fBasics")
+library("DAAG")
+library("MASS")
+library("fdth")
+library("dplyr")
+library("moments")
+library("qcc")
+library("rafalib")
+library("reshape2")
+library("survey")
+library("raster")
+library("knitr")
+```
+
 ##QUESTÃO ED2
 Os seguintes dados representam o número de acidentes diários em um complexo
 industrial (colocados em ordem crescente), durante o período de 50 dias. (Dados fictícios)
 
-a) Construir o histograma de frequência relativa para representar esses dados.
-
-b) O estatístico decide separar destes dados os dias com número de acidentes inferior a dois desvios padrões abaixo da média 
-e também separar os dias com número de acidentes superior a um e meio desvio padrão acima da média. 
-
-c) Qual a porcentagem de dias que serão separados em cada caso?
-
-d) Que características pretende-se realçar quando se representa um conjunto de dados sob a forma de um histograma 
-e de um diagrama de séries temporais?
-
-###Resposta letra a)
-*Faremos a leitura dos dados com o comando read.csv(), para ler o arquivo do tipo csv*
-```{r, results= 'asis'}
-nacid <- read.table("ED2.csv",header =  FALSE, sep = ";")
-knitr::kable(nacid, align = 'c')
+```{r, echo=FALSE, warning=FALSE}
+setwd(paste(getwd(),"/DBED",sep=""))
+LQED2 <- read.table(file = "LQED2.txt",
+                    header = FALSE,
+                    col.names = "NumAcidDia")
+knitr::kable(LQED2, align = 'c')
+setwd("../")
 ```
 
-Construção do Histograma de frequência relativa
+a) Construir o histograma de frequência relativa para representar esses dados.
+
+b) O estatístico decide separar destes dados os dias com número de acidentes inferior a dois desvios padrões abaixo da média e também separar os dias com número de acidentes superior a um e meio desvio padrão acima da média. Qual a porcentagem de dias que serão separados em cada caso?
+
+d) Que características pretende-se realçar quando se representa um conjunto de dados sob a forma de um histograma e de um diagrama de séries temporais?
+
+###Resposta letra a)
+Construção do Histograma de frequência relativa:
 
 ```{r, fig.align = 'center', fig.height= 4, fig.width= 5}
-plot(fdt(nacid), type = "rfph", main = "Número de Acidentes Diários",
-     col="lightblue", v= TRUE, x.round = 0)
+plot(fdt(LQED2),
+     type = "rfph",
+     main = "Número de Acidentes Diários",
+     xlab = "Acidentes",
+     ylab = "Frequência Relativa / %",
+     col  = "lightblue", v= TRUE, x.round = 0)
 ```
 
 Construção de tabela de frequência para uma visualização completa dos das frequências relativas.
+
 ```{r}
-(tf <- as.list(tf<-fdt(nacid)))
+tab.frequencia <- as.data.frame(fdt(LQED2$NumAcidDia)$table)
+knitr::kable(tab.frequencia, align = 'c')
 ```
 
 ###Resposta letra b)
-Normalizando
+Normalizando os dados amostrais.
+
 ```{r}
-z = (nacid - mean(nacid$V1)) / sd(nacid$V1)
-dias.inferiores <- z < -2
+z <- (LQED2 - mean(LQED2$NumAcidDia)) / sd(LQED2$NumAcidDia)
 ```
+
 Calculando a porcentagem para dias inferiores menores que 2 desvios padrão abaixo da média e para 1.5 desvio padrão acima da média.
+
 ```{r}
-sum(dias.inferiores)/length(nacid$V1)*100
+dias.inferiores <- z < -2
+DiasInferiores  <- sum(dias.inferiores)/length(LQED2$NumAcidDia)*100
+
 dias.superiores <- z > 1.5
-sum(dias.superiores)/length(nacid$V1)*100
-par(mfrow = c(1,1))
+DiasSuperiores  <-sum(dias.superiores)/length(LQED2$NumAcidDia)*100
+
+knitr::kable(data.frame(DiasInferiores, DiasSuperiores), align = 'c')
 ```
 
+###Resposta letra c)
 ```{r, fig.width = 4, fig.height= 4, fig.align='center'}
-plot(nacid$V1, xlab = "Dias",
-     ylab = "Acidentes", 
-     main = "Nº de acidentes/dia", 
-     pch = 20, cex = 0.5)
+plot(LQED2$NumAcidDia,
+     main = "Série Temporal",
+     xlab = "Dias",
+     ylab = "Acidentes")
+plot(fdt(LQED2$NumAcidDia),
+     type = "rfph",
+     main = "Histograma",
+     xlab = "Número de acidentes diários",
+     ylab = "Frequência Relativa / %",
+     col  ="lightblue", v= TRUE, x.round = 0)
 ```
 
-Ao comparar os dois gráficos podemos observar que o histograma procura mostrar 
-o resultado da frequência em função das classes, com isso é possível notar se 
-a distribuição é normal, se há curtose ou assimetria, ou se a distribuição tem 
-mais de uma moda ou não, ou seja, unimodal, bimodal, etc. Já o gráfico de séries 
-temporais, procura mostrar a tendência, e a dispersão relativa dos dados, ou seja, 
-é possível ter uma idéia de como será o coeficiente de variação dos dados.
+Ao comparar os dois gráficos observa-se que o histograma procura avaliar a forma e a distribuição de dados amostrais, bem como a presença de assimetria e/ou curtose na distribuição normal. Já o gráfico de séries temporais é usado para avaliar padrões e comportamento nos dados ao longo do tempo, sendo especialmente úteis na comparação de padrões de dados de diferentes grupos, identifiação de tendências e exibição da dispersão relativa dos dados.
