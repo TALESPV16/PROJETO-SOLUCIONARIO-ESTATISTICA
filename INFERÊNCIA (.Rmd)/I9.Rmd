@@ -18,5 +18,5 @@ sp = sqrt(sp2)
 t.alpha = abs(qt(p = 0.05/2, df = n1+n2-2))
 dif.m = 25
 ```
-*Acredito que a questão falta dados*
+*Acredito que a questão faltam dados*
 
