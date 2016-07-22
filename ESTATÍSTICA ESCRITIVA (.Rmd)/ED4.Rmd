@@ -42,7 +42,7 @@ a) Histograma, e de um diagrama de séries temporais?
 ###Resposta letra a)
 ```{r, fig.width = 10}
 set.seed(1)
-d.norm = rnorm(n = 100, mean = 0, sd = 1)
+d.norm <- rnorm(n = 100, mean = 0, sd = 1)
 par(mfrow = c(1,2))
 hist(d.norm, main = "Histograma", xlab = "Valor", 
      ylab = "Frequência", col = "lightblue")
