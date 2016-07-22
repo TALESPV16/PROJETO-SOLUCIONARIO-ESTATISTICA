@@ -15,6 +15,10 @@ print(E.1)
 print(E.2)
 ```
 
-*A primeira amostragem com 5 peças apresentou um erro de 4,60kg com 95% de confiança. Valor superior aos 2kg requeridos. A amostragem de mais 15 peças, provocou a redução do erro para 1,73kg, mantendo constante o valor da média e desvio padrão da primeira amostragem. A amostragem adicional de 15 peças atende às especificações de precisão entretanto, uma amostragem adicional de 11 peças seria suficiente para atender Ãs especificações.*
+*A primeira amostragem com 5 peças apresentou um erro de 4,60kg com chance de 95%. 
+Valor superior aos 2kg requeridos. A amostragem de mais 15 peças, provocou a redução 
+do erro para 1,73kg, mantendo constante o valor da média e desvio padrão da primeira 
+amostragem. A amostragem adicional de 15 peças atende às especificações de precisão 
+entretanto, uma amostragem adicional de 11 peças seria suficiente para atender às
+especificações.*
 
-\newpage
