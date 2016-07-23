@@ -1,10 +1,45 @@
-##QUESTÃO RLM5
+---
+output: html_document
+---
+#REGRESSÃO LINEAR MÚLTIPLA
+```{r, include=FALSE}
+library("mime")
+library("stringi")
+library("magrittr") 
+library("Rcpp")
+library("evaluate")
+library("digest")
+library("formatR")
+library("highr")
+library("markdown")
+library("stringr")
+library("yaml")
+library("bitops")
+library("caTools")
+library("htmltools")
+library("knitr")
+library("rmarkdown")
+library("e1071")
+library("fBasics")
+library("DAAG")
+library("MASS")
+library("fdth")
+library("dplyr")
+library("moments")
+library("qcc")
+library("rafalib")
+library("reshape2")
+library("survey")
+library("raster")
+library("knitr")
+```
 
+##QUESTÃO RLM5
 a) O modelo de regressão linear pode ser extrapolado? 
 b) Como definir o domínio de aplicação de um modelo de regressão linear? Justifique sua resposta.
 
 ###Resposta letra a)
+Na previsão de novas observações e na estimação da resposta média de um dado ponto, deve-se ser cuidadoso na extrapolção além da região contendo as observações originais, pois é possível que um modelo que se ajuste de forma adequada na região dos dados originais, não se ajuste de forma satisfatória fora daquela faixa.
 
-*Na previsão de novas observações e na estimação da resposta média de um dado ponto, deve-se ser cuidadoso na extrapolção além da região contendo as observações originais, pois é possível que um modelo que se ajuste de forma adequada na região dos dados originais, não se ajuste de forma satisfatória fora daquela faixa.*
+###Resposta letra b)
 
-\newpage
