@@ -39,11 +39,15 @@ Para fins de vistoria ambiental, a concentração de monóxido de carbono (CO, m
 foi medida em quatro chaminés. Os dados obtidos são apresentados a seguir,
 
 ```{r, echo=FALSE, warning=FALSE}
+setwd(paste(getwd(),"/DBED",sep=""))
+
 LQED1 <- read.table(file = "LQED1.txt", header = TRUE)
 knitr::kable(LQED1, align = 'c')
 
 LQED1.1 <- read.table(file = "LQED1.1.txt", header = TRUE, na.strings = "NA")
 knitr::kable(LQED1.1, align = 'c')
+
+setwd("../")
 ```
 
 ```{r, echo=FALSE, fig.height= 9, fig.width= 11}
@@ -125,4 +129,5 @@ gr3 <- sapply(X = c("Cham1","Cham2","Cham3","Cham4"), FUN=function(s) {
                main = paste("Verificando a normalidade da",s), 
              pch = 18)
         qqline(LQED1[,s], col = "red")
-        })```
+        })
+```
