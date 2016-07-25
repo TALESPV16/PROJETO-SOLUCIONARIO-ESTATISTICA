@@ -1,29 +1,62 @@
-##QUESTÃO PE5
+---
+output: html_document
+---
+#PLANEJAMENTO DE EXPERIMENTOS
+```{r, include=FALSE}
+library("mime")
+library("stringi")
+library("magrittr") 
+library("Rcpp")
+library("evaluate")
+library("digest")
+library("formatR")
+library("highr")
+library("markdown")
+library("stringr")
+library("yaml")
+library("bitops")
+library("caTools")
+library("htmltools")
+library("knitr")
+library("rmarkdown")
+library("e1071")
+library("fBasics")
+library("DAAG")
+library("MASS")
+library("fdth")
+library("dplyr")
+library("moments")
+library("qcc")
+library("rafalib")
+library("reshape2")
+library("survey")
+library("raster")
+library("knitr")
+library("FrF2")
+```
 
+##QUESTÃO PE5
 Considere que se deseja realizar experimentos considerando três fatores e uma resposta e que apenas 5 experimentos possam ser realizados.
 
 a) Proponha um planejamento de experimentos e indique que experimentos serão realizados. Justifique sua resposta.
+
 b) Indique qual a resolução (grau de confundimento) e que fatores serão confundidos considerando sua resposta em (a). Justifique sua resposta.
+
 c) Como você avaliaria a existência de relações não lineares entre fatores e respostas? Justifique sua resposta.
 
 ###Resposta letra a)
 ```{r}
-plan.PE5 = FrF2(nfactors = 3,
-                resolution = 3,
-                randomize = FALSE,
-                replications = 5,
-                repeat.only = TRUE)
+plan.PE5 <- FrF2(nfactors = 3,
+                 resolution = 3,
+                 replications = 1,
+                 randomize = TRUE)
 summary(plan.PE5)
 ```
-###Resposta letra b)
-```{r}
-##Resposta da letra b
-```
 
+O planejamento de experiemtos acima propõe a realização de quatro experiemtos cada um contendo três fatores, dois níveis para cada fator e uma resposta. Os experiemtos serão realizados de forma única e aleatória. Os experiemtos a serem realizados estão identificados em *The design intself*. Como dispomos de 5 experiemtos, podemos utilizar um experiento adicional caso necessário.
+
+###Resposta letra b)
+Trata-se de de um experimento fatorial com graus de confundimento III, no qual nenhum efeito principal está associado com outro efeito principal, porém efeitos princiapais estão associados com interações de segunda ordem. Os confundimenros entre interações estão apresentados em *Alias structure*.
 
 ###Resposta letra c)
-```{r}
-##Resposta da letra c
-```
-
-\newpage
+A realização de um experiemnto fatorial com dois níveis não é adequada para avaliar a existência de relações não lineares entre fatores e respostas, pois não permite a identificação gráfica de curvaturas nos gráficos de interação. Entretanto, a utilização de mais níveis apresentam desvantagens como: a necessidade de realização de muitos experimentos (aumento do custo); não trivialidade das realções de confundimento; e interpretação mais complicada das interações. Em alguns casos, é preciso realizar o experimento em blocos e, nem sempre, o tamanho do bloco é suficiente para acomodar todos os tratamentos.
