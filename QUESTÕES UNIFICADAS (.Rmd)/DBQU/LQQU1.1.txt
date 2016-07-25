@@ -1,0 +1,2 @@
+Amostra	Media	DP	Minimo	Q1	Mediana	Q3	Maximo	Assimetria	Curtose
+Diaria	683.9	105.3	557.0	585.9	652.3	770.8	925.5	0.70	-0.06

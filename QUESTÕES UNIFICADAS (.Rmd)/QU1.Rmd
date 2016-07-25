@@ -1,9 +1,55 @@
-##QUESTÃO QU1
+---
+output: html_document
+---
+#QUESTÕES UNIFICADAS
+```{r, include=FALSE}
+library("mime")
+library("stringi")
+library("magrittr") 
+library("Rcpp")
+library("evaluate")
+library("digest")
+library("formatR")
+library("highr")
+library("markdown")
+library("stringr")
+library("yaml")
+library("bitops")
+library("caTools")
+library("htmltools")
+library("knitr")
+library("rmarkdown")
+library("e1071")
+library("fBasics")
+library("DAAG")
+library("MASS")
+library("fdth")
+library("dplyr")
+library("moments")
+library("qcc")
+library("rafalib")
+library("reshape2")
+library("survey")
+library("raster")
+library("knitr")
+```
 
-A demanda bioquímica de oxigênio (DBO em mg/L) foi obtida a partir de uma pesquisa em
-resíduos industriais. Noventa e nove (99) observações foram levantadas a cada 4 horas, fornecendo seis (6) observações diárias para 16 dias, mais três (3) observações no 17o dia. O entendimento do comportamento horário e composto (média diária) será necessário para projetar o tratamento do processo.
-Os padrões de variação também precisam ser vistos porque eles influenciam, por exemplo, a
-exeqüibilidade em utilizar-se unidades de equalização do processo para reduzir as variações de carga de DBO. Os dados podem ter propriedades interessantes, assim a apresentação deve ser completamente clara e não estar aberta para interpretações confusas.
+##QUESTÃO QU1
+A demanda bioquímica de oxigênio (DBO em mg/L) foi obtida a partir de uma pesquisa em resíduos industriais. Noventa e nove (99) observações foram levantadas a cada 4 horas, fornecendo seis (6) observações diárias para 16 dias, mais três (3) observações no 17o dia. O entendimento do comportamento horário e composto (média diária) será necessário para projetar o tratamento do processo. Os padrões de variação também precisam ser vistos porque eles influenciam, por exemplo, a exeqüibilidade em utilizar-se unidades de equalização do processo para reduzir as variações de carga de DBO. Os dados podem ter propriedades interessantes, assim a apresentação deve ser completamente clara e não estar aberta para interpretações confusas.
+
+```{r, echo=FALSE, warning=FALSE}
+setwd(paste(getwd(),"/DBQU",sep=""))
+
+LQQU1.1 <- read.table(file = "LQQU1.1.txt",
+                      header = TRUE)
+knitr::kable(LQQU1.1, align = 'c')
+
+LQQU1.2 <- read.table(file = "LQQU1.2.txt",
+                      header = TRUE)
+knitr::kable(LQQU1.2, align = 'c')
+
+setwd("../")
+```
 
 a) Do ponto de vista estatístico, qual a importância de avaliar a concentração de DBO por período de amostragem (4h, 8h, 12h, 16h, 20h, e 24h) ao invés de utilizar unicamente a DBO média para as análises posteriores?
 
@@ -11,4 +57,66 @@ b) Avalie se a concentração de DBO horária média varia significativamente du
 
 c) Um dos critérios estabelecidos para avaliar a inviabilidade técnica de instalação de uma unidade de tratamento da DBO é baseada na avaliação da probabilidade em que a DBO horária exceda os limites de especificação. Considera-se o processo de tratamento inviável se a probabilidade da DBO (mg/L) ultrapassar o seu valor médio + 10% for igual ou superior a 30%. Pergunta-se, este processo é viável tecnicamente? Justifique sua resposta.
 
-\newpage
+### Resposta letra a)
+Do ponto de vista estatístico, as diferentes divisões do período de amostragem dos dados coletados para a avaliação da concentração de DBO permite o maior entendimento do comportamnto horario e composto da concentração do mesmo. A divisão horária por período de amostragem permite a identificação de padrões e tendéncias ao longo do dia, possibilitando um entendimento maior do processo de tratamento, o que facorece a execução de ações para redução da variação da carga de DBO.A simples utilização do comportamento composto (média diária) da concentração de DBO pode comprometer o claro entendimento das variações do processo ao longo do dia, tornando ineficientes as futuras iniciativas para redução da variação de carga de DBO. A análise da variação da média diária permite a identifiação de padrões e tendências da variação de DBO relacionadas à sazionaloidade em períodos maiores (semanas, meses, anos, etc.), negligenciando a sensibilidade quanto às variações horárias ao longo do dia necessárias para projetar o tratamento do processo.
+
+### Resposta letra b)
+```{r}
+plot(x = LQQU1.2$Amostra,
+     y = LQQU1.2$Media,
+     main = "DBO (mg/L) média a cada 4 horas",
+     ylab = "DBO (mg/L)",
+     xlab = "Tempo (h)",
+     type = "l")
+points(LQQU1.2, pch = 16, col = "red")
+
+dp4h  <- LQQU1.2$DP[1]
+dp8h  <- LQQU1.2$DP[2]
+dp12h <- LQQU1.2$DP[3]
+dp16h <- LQQU1.2$DP[4]
+dp20h <- LQQU1.2$DP[5]
+dp24h <- LQQU1.2$DP[6]
+
+mu4h  <- LQQU1.2$Media[1]
+mu8h  <- LQQU1.2$Media[2]
+mu12h <- LQQU1.2$Media[3]
+mu16h <- LQQU1.2$Media[4]
+mu20h <- LQQU1.2$Media[5]
+mu24h <- LQQU1.2$Media[6]
+
+Dif.24h <- function(mean1, sd1, mean2, sd2, alpha = 0.1, n1 = 99, n2 = 99) {
+        F0 <- sd1^2 / sd2^2
+        f.alpha <- abs(qf(p = alpha/2, df1 = n1-1, df2 = n1-1))
+        
+        if (F0 > f.alpha) {
+                print("Rejeitar Hipótese Nula - Existe Diferença entre as Variâncias")
+                
+                v = ((((sd1^2/n1)+(sd2^2/n2))^2)/(((sd1^2/n1)^2)/(n1-1)+((sd2^2/n2)^2)/(n2-1)))
+                T0 = (mean1-mean2) / sqrt((sd1^2/n1)+(sd2^2/n2))
+                t.alpha = abs(qt(p = alpha/2, df = round(v)))
+                if (T0 > t.alpha) {
+                        print("Rejeitar Hipótese Nula - Existe Diferença entre as Médias")
+                }else {
+                        print("Falhar em Rejeitar a Hipótese Nula - Não Exite Diferença Significativa entre as Médias")
+                }
+        }else {
+                print("Falhar em Rejeitar a Hipótese Nula - Não Exite Diferença Significativa  entre as Variâncias")
+                sp2 = ((n1-1)*sd1^2 + (n2-1)*sd2^2) / (n1+n2-2)
+                sp = sqrt(sp2)
+                T0 = (mean1-mean2) / (sp*sqrt((1/n1)+(1/n2)))
+                t.alpha = abs(qt(p = alpha/2, df = n1+n2-2))
+                if (T0 > t.alpha) {
+                        print("Rejeitar Hipótese Nula - Existe Diferença entre as Médias")  
+                }
+                else {
+                        print("Falhar em Rejeitar a Hipótese Nula - Não Exite Diferença Significativa  entre as Médias")}
+        }
+}
+
+Dif.24h(mean1 = mu12h, sd1 = dp12h, mean2 = mu20h, sd2 = dp20h)
+Dif.24h(mean1 = mu16h, sd1 = dp16h, mean2 = mu24h, sd2 = dp24h)
+Dif.24h(mean1 = mu8h, sd1 = dp8h, mean2 = mu16h, sd2 = dp16h)
+
+```
+
+
