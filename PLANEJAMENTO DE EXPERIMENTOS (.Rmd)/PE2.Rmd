@@ -54,23 +54,23 @@ c) Qual a vantagem em se realizar cada experimento em duplicata?
 
 ###Resposta letra a)
 ```{r}
-plan.PE2 = FrF2(nruns = 2^2,
-                nfactors = 2,
-                factor.names = list(H2SO4 = c(0, 0.2),
-                                    FeCl3 = c(1.2, 1.4)),
-                randomize = FALSE,
-                replications = 1,
-                repeat.only = FALSE)
+plan.PE2 <- FrF2(nruns = 2^2,
+                 nfactors = 2,
+                 factor.names = list(H2SO4 = c(0, 0.2),
+                                     FeCl3 = c(1.2, 1.4)),
+                 randomize = FALSE,
+                 replications = 1,
+                 repeat.only = FALSE)
 
-Oleo = c(2400,
-         100,
-         400,
-         1000)
+Oleo <- c(2400,
+          100,
+          400,
+          1000)
 
-plan.PE2.atualizado = add.response(design = plan.PE2, response = Oleo)
+plan.PE2.atualizado <- add.response(design = plan.PE2, response = Oleo)
 summary(plan.PE2.atualizado)
 
-modelo.PE2 = lm(Oleo ~ H2SO4 * FeCl3, data = plan.PE2.atualizado)
+modelo.PE2 <- lm(Oleo ~ H2SO4 * FeCl3, data = plan.PE2.atualizado)
 summary(modelo.PE2)
 
 DP <- DanielPlot(fit = plan.PE2.atualizado,
@@ -78,7 +78,7 @@ DP <- DanielPlot(fit = plan.PE2.atualizado,
                  autolab = FALSE,
                  alpha = 0.1)
 
-efeitos = data.frame(DP$effect, DP$x)
+efeitos <- data.frame(DP$effect, DP$x)
 colnames(efeitos) <- c("", "Efeitos")
 knitr::kable(efeitos, align = 'c')
 

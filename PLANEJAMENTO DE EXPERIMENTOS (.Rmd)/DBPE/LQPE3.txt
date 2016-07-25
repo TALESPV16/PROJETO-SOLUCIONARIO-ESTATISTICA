@@ -1,0 +1,5 @@
+Corrida	Ordem	Temperatura	Tempo	Rendimento
+1	4	40	Baixo	57	61
+2	2	60	Baixo	92	88
+3	3	40	Alto	55	53
+4	1	60	Alto	66	70
