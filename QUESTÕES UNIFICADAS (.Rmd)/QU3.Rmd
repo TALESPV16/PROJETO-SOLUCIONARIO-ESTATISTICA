@@ -81,27 +81,50 @@ hist(x = LQQU3.1$Perda,
      ylab = "Frequência Absoluta")
 ```
 
+**Adicionar figura da questão!**
+
 A Figura 2 mostra que 40% da perda de vapor pode ser explicada pela relação entre a geração de energia elétrica pelas turbinas, sendo esta e o alívio de vapor as principais fontes de variação a serem analisadas. Na Tabela 1 são apresentados os dados de perda de vapor e consumo de energia elétrica.
 
 a) Estime as estatísticas descritivas de média e desvio padrão dos dados referentes a perda de vapor da Tabela 1 considerando um nível de confiança de 95%. Discuta os resultados considerando as informações apresentadas no Quadro 1 e Figura 1.
 
 b) Selecionando-se uma unidade amostral ao caso: (a) Qual a probabilidade que esta amostra tenha perda superior a 25%. (b) Qual deve ser a perda de vapor para que 95% da perda seja inferior a 25%?
 
-c) a) Considerando que o engenheiro responsável pelo processo acha o intervalo estimado no item 1(a) muito grande, quantas amostrar ele deveria ter para um intervalo de 95% com erro menor que 0,5% de perdas de vapor? b) Esperava-se que a perda média de vapor da unidade não ultrapasse 18%, ao nível de confiança de 95%, para que não haja atuação manual no processo. Verifique se este procedimento deve ser alterado com base na teoria de teste de hipóteses. Avalie a influência da alteração do nível de confiança para 99% sobre os erros do tipo 1 para este sistema.
+c) **(a)** Considerando que o engenheiro responsável pelo processo acha o intervalo estimado no item 1(a) muito grande, quantas amostrar ele deveria ter para um intervalo de 95% com erro menor que 0,5% de perdas de vapor? **(b)** Esperava-se que a perda média de vapor da unidade não ultrapasse 18%, ao nível de confiança de 95%, para que não haja atuação manual no processo. Verifique se este procedimento deve ser alterado com base na teoria de teste de hipóteses. Avalie a influência da alteração do nível de confiança para 99% sobre os erros do tipo 1 para este sistema.
 
-d) Atividade no R:
+d) Acredita-se que os dados de perda de vapor (t/mês) e produção (t/mês) sejam correlacionados.
 
-d1. Complemente a análise realizada na questão 1 utilizando outras estatísticas descritivas e gráficos além dos apresentados na Figura 1.
+d.1. Verifique se essa afirmação é verdadeira considerando os resultados apresentados no Quadro 2 e Figura 4. Não se esqueça de utilizar também a teoria do teste de hipóteses nas suas justificativas.
 
-d2. Solucione a questão 2 utilizando o R.
+```{r, echo=FALSE}
+modelo.QU3 <- lm(formula = Perda.Total ~ Producao.Total, data = LQQU3)
+summary(modelo.QU3)
 
-d3. Solucione a questão 3 utilizando o R.
+par(mfrow = c(2,2))
+qqnorm(modelo.QU3$residuals, pch = 20, col = "red")
+qqline(y = modelo.QU3$residuals, col = 4, lwd=2,lty=2)
+plot(x = modelo.QU3$fitted.values, y = modelo.QU3$residuals,
+     main = "Resíduos X Valores Ajustados",
+     ylab = "Resíduos",
+     xlab = "Valores Ajustados",
+     pch = 20,
+     col = "red")
+lines.default(rep(0, 9000), col = "black")
+hist(x = modelo.QU3$residuals,
+     main = "Histograma dos Resíduos",
+     ylab = "Frequência Absoluta",
+     xlab = "Resíduos",
+     col = "grey")
+plot(x = seq(1,nrow(LQQU3)), y = modelo.QU3$residuals,
+     main = "Resíduos X Observação",
+     ylab = "Resíduos",
+     xlab = "Observação",
+     type = "l",
+     col = "blue")
+points(modelo.QU3$residuals, pch = 20, col = "red")
+lines.default(rep(0, 9000), col = "black")
+```
 
-e) Acredita-se que os dados de perda de vapor (t/mês) e produção (t/mês) sejam correlacionados.
-
-e.1. Verifique se essa afirmação é verdadeira considerando os resultados apresentados no Quadro 2 e Figura 4. Não se esqueça de utilizar também a teoria do teste de hipóteses nas suas justificativas.
-
-e.2. Proponha um algoritmo para construção de um modelo de regressão multivariado. Considere que variações na temperatura ambiente, pressão na linha de distribuição e percentual de condensado na linha podem causar variações na perda de vapor. Considere a possibilidade de existir diferentes padrões por turno de produção (7-15h, 15-23h, 23-07h), relações não lineares, correlação entre variáveis preditoras, valores aberrantes, etc.
+d.2. Proponha um algoritmo para construção de um modelo de regressão multivariado. Considere que variações na temperatura ambiente, pressão na linha de distribuição e percentual de condensado na linha podem causar variações na perda de vapor. Considere a possibilidade de existir diferentes padrões por turno de produção (7-15h, 15-23h, 23-07h), relações não lineares, correlação entre variáveis preditoras, valores aberrantes, etc.
 
 ###Resposta letra a)
 ```{r}
@@ -152,8 +175,50 @@ pt(q = T0, df = nrow(LQQU3.1)-1, lower.tail = FALSE)
 A perda de vapor para que 95% da perda seja inferior a 25% é:
 ```{r}
 T0 <- qt(p = 0.95, df = nrow(LQQU3.1)-1)
-T0*(sd(LQQU3$Perda)/sqrt(nrow(LQQU3)))+mean(LQQU3$Perda)
+round(T0*(sd(LQQU3$Perda)/sqrt(nrow(LQQU3)))+mean(LQQU3$Perda), digits = 2)
 ```
 
+###Resposta letra c)
+**c.(a)**
+```{r}
+E <- 0.5
+n <- ((qt(p = 0.05/2, df = nrow(LQQU3)-1, lower.tail = FALSE)*sd(LQQU3$Perda))/E)^2
+print(round(n))
+```
 
+**c.(b)**
+```{r}
+t.test(x = LQQU3$Perda,
+       mu = 18,
+       alternative = "less",
+       conf.level = 0.95)
 
+t.test(x = LQQU3.1$Perda,
+       mu = 18,
+       alternative = "less",
+       conf.level = 0.95)
+```
+
+Realizou-se um teste T para avaliar se a perda média de vapor da unidade é inferior a 18%. Os testes foram realizados considerando os dados com e sem a presença de outliers.
+
+O teste T, para o conjunto total de dados, falhou em rejeitar a hipótese nula na qual a perda de vapor é igual a 18%. Com base na teoria de teste de hipótese este procedimento deve ser alterado, pois não é possível afirmar que a média da perda de vapor é inferior a 18%.
+
+Já o teste T, para o conjunto de dados sem outliers, rejeitou a hipótese nula na qual a perda de vapor é igual a 18%. Com base na teoria de teste de hipótese não é necessário alterar este procedimento, pois a média verdadeira da perda de vapor será inferior a 18% em 95% das amostragens.
+
+Construiu-se o código abaixo para avaliar a influência da alteração do nível de confiança para 99% sobre os erros do tipo 1 para este sistema.
+
+```{r}
+t.test(x = LQQU3$Perda,
+       mu = 18,
+       alternative = "less",
+       conf.level = 0.99)
+
+t.test(x = LQQU3.1$Perda,
+       mu = 18,
+       alternative = "less",
+       conf.level = 0.99)
+```
+
+O aumento do nível de confiânça (diminuição do nível de significância alpha) torna inviável a rejeição da hipótese nula na qual a perda de vapor é igual a 18% para ambos os casos (com e sem outlier). Isso significa que, com base na teoria de teste de hipótese, é necessário alterar este procedimento, pois a média verdadeira da perda de vapor não será inferior a 18% em 99% das amostragens.
+
+###Resposta letra d)
