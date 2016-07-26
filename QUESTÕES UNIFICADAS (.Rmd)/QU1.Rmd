@@ -86,57 +86,75 @@ mu24h <- LQQU1.2$Media[6]
 
 Dif.24h <- function(mean1, sd1, mean2, sd2, alpha = 0.1, n1 = 99, n2 = 99) {
         F0 <- sd1^2 / sd2^2
+        
         f.alpha <- qf(p = alpha/2, df1 = n1-1, df2 = n1-1, lower.tail = FALSE)
+        
         LS.F <- (sd1^2 / sd2^2)*f.alpha
+        
         LI.F <- (sd1^2 / sd2^2)*(1/f.alpha)
+                
         if (F0 > f.alpha) {
                 print("Rejeitar Hipótese Nula - Existe Diferença entre as Variâncias")
                 
-                v = (((sd1^2/n1)+(sd2^2/n2))^2)/(((sd1^2/n1)^2)/(n1-1)+((sd2^2/n2)^2)/(n2-1))
+                v <- (((sd1^2/n1)+(sd2^2/n2))^2)/(((sd1^2/n1)^2)/(n1-1)+((sd2^2/n2)^2)/(n2-1))
                 
-                T0 = (mean1-mean2) / sqrt((sd1^2/n1)+(sd2^2/n2))
+                T0 <- (mean1-mean2) / sqrt((sd1^2/n1)+(sd2^2/n2))
                 
-                t.alpha = abs(qt(p = alpha/2, df = round(v)))
+                t.alpha <- abs(qt(p = alpha/2, df = round(v)))
+                
+                p.value.T0 <- pt(q = T0, df = round(v), lower.tail = FALSE)*2
                 
                 if (T0 > t.alpha) {
                         print("Rejeitar Hipótese Nula - Existe Diferença entre as Médias")
+                        knitr::kable(data.frame(p.value.T0), align = 'c')
                 }else {
                         print("Falhar em Rejeitar a Hipótese Nula - Não Exite Diferença Significativa entre as Médias")
+                        knitr::kable(data.frame(p.value.T0), align = 'c')
                 }
         }else {
                 print("Falhar em Rejeitar a Hipótese Nula - Não Exite Diferença Significativa  entre as Variâncias")
-                sp2 = ((n1-1)*sd1^2 + (n2-1)*sd2^2) / (n1+n2-2)
+                sp2 <- ((n1-1)*sd1^2 + (n2-1)*sd2^2) / (n1+n2-2)
                 
-                sp = sqrt(sp2)
+                sp <- sqrt(sp2)
                 
-                T0 = (mean1-mean2) / (sp*sqrt((1/n1)+(1/n2)))
+                T0 <- (mean1-mean2) / (sp*sqrt((1/n1)+(1/n2)))
                 
-                t.alpha = abs(qt(p = alpha/2, df = n1+n2-2))
+                t.alpha <- abs(qt(p = alpha/2, df = n1+n2-2))
+                
+                p.value.T0 <- pt(q = T0, df = n1+n2-2, lower.tail = FALSE)*2
                 
                 if (T0 > t.alpha) {
-                        print("Rejeitar Hipótese Nula - Existe Diferença entre as Médias")  
+                        print("Rejeitar Hipótese Nula - Existe Diferença entre as Médias")
+                        knitr::kable(data.frame(p.value.T0), align = 'c')
                 }
                 else {
-                        print("Falhar em Rejeitar a Hipótese Nula - Não Exite Diferença Significativa  entre as Médias")}
+                        print("Falhar em Rejeitar a Hipótese Nula - Não Exite Diferença Significativa  entre as Médias")
+                        knitr::kable(data.frame(p.value.T0), align = 'c')}
         }
 }
 
-Dif.24h(mean1 = mu4h, sd1 = dp4h, mean2 = mu8h, sd2 = dp8h)
-Dif.24h(mean1 = mu4h, sd1 = dp4h, mean2 = mu12h, sd2 = dp12h)
-Dif.24h(mean1 = mu4h, sd1 = dp4h, mean2 = mu16h, sd2 = dp16h)
-Dif.24h(mean1 = mu4h, sd1 = dp4h, mean2 = mu20h, sd2 = dp20h)
-Dif.24h(mean1 = mu4h, sd1 = dp4h, mean2 = mu24h, sd2 = dp24h)
+Dif.24h(mean1 = mu12h, sd1 = dp12h, mean2 = mu20h, sd2 = dp20h)
+Dif.24h(mean1 = mu16h, sd1 = dp16h, mean2 = mu24h, sd2 = dp24h)
 ```
+
+Através da análise do gráfico de série temporal da média da concentração de DBO a cada 4 horas é possível perceber variações do valor da mesma ao longo do dia. Realizou-se testes de hipótese para a variância e média da concentração de DBO de duas diferentes amostas horárias a fim de avaliar se a concentração de DBO horária média varia significativamente durante 24h de operação. O código acima apresenta a função Dif.24h (criada pelo usuário) para a avaliação da variância e desvio padrão de duas amostras horárias da concentração de DBO. Inicialmente, realiza-se um teste F para inferir sobre a variância de duas distribuições normais. Em seguida, realiza-se um teste T para inferir sobre a diferênça entre as médias de duas distribuições normais. Foram realizadas duas comparações. A primeira envole as amostra **12h** e **20h**. O teste aplicado falhou em rejeitar a hipótese de igualdade entres as concentrações médias de DBO nas amostras de **12h** e **20h**, confirmando o exposto pelo gráfico de série temporal. A segunda comparação envolve as amostras **16h** e **24h**. O teste aplicado rejeitou a hipótese nula de igualdade entre as concentrações médias de DBO, confirmando a existência de variação significativamente, utilizando um nível de significância de 10%, durante 24h de operação. A dificuldade com a abordagem "por comparação" para comparações múltiplas é a possibilidade do aumento da probabilidade do Erro Tipo I ou (equivalentemente) a possibilidade de diminuição do nível de confiança global. Logo uma correção do nível de significância ou do p-valor se faz necessária na realização de comparações múltiplas.
 
 ### Resposta letra c)
 
 ```{r}
-mu <- LQQU1.2$Media
+mu     <- LQQU1.2$Media
 xbarra <- LQQU1.2$Media*1.1
-S <- LQQU1.2$DP
-n <- rep(99,6)
+S      <- LQQU1.2$DP
+n      <- rep(99,6)
 
-T0 <- (xbarra - mu) / (S/sqrt(n))
-probabilidade <- (1 - pt(q = T0, df = n-1))*100
+T0            <- (xbarra - mu) / (S/sqrt(n))
+probabilidade <- pt(q = T0, df = n-1, lower.tail = FALSE)*100
+
+tabela           <- rbind(round(T0, digits = 2), round(probabilidade, digits = 2))
+rownames(tabela) <- c("T0", "Probabilidade / %")
+colnames(tabela) <- LQQU1.2$Amostra
+
+knitr::kable(tabela, align = 'c')
 ```
 
+O processo...
