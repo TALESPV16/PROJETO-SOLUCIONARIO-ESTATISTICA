@@ -1,11 +1,48 @@
-##QUESTÃO CEP3
+---
+output: html_document
+---
+#CONTROLE ESTATÍSTICO DE PROCESSOS
+```{r, include=FALSE}
+library("mime")
+library("stringi")
+library("magrittr") 
+library("Rcpp")
+library("evaluate")
+library("digest")
+library("formatR")
+library("highr")
+library("markdown")
+library("stringr")
+library("yaml")
+library("bitops")
+library("caTools")
+library("htmltools")
+library("knitr")
+library("rmarkdown")
+library("e1071")
+library("fBasics")
+library("DAAG")
+library("MASS")
+library("fdth")
+library("dplyr")
+library("moments")
+library("qcc")
+library("rafalib")
+library("reshape2")
+library("survey")
+library("raster")
+library("knitr")
+library("FrF2")
+```
 
-Dois gráficos de controle (a) e (b) foram construídos considerando dados de subgrupos de tamanho 5 e 4, respectivamente. 
+##QUESTÃO CEP3
+Dois gráficos de controle (a) e (b) foram construídos considerando dados de subgrupos de tamanho 5 e 4, respectivamente.
+
+**Adicionar imagens da questão!**
 
 a) Analise criticamente estes gráficos de controle e discuta se eles poderiam ser utilizados para o acompanhamento de processos.
 
 ###Resposta letra a)
-
 Os gráficos de controle em (a) contém um erro no LIC, e a quantidade 2$\sigma$ difere em 0,001 da mesma quantidade do LSC, ainda sim não há significativa diferença ao obsevar que, o valor do coeficiente $A_{2}$ tabelado para n = 5 (tamanho do subgrupo sugerido para a construção dessa carta de controle), que corresponde ao valor de 0,577, ou seja, $A_{2} = 0,577$, não difere muito do valor calculado abaixo, bem como os limites de controle calculados com o valor tabelado não diferem muito dos gráficos apresentados. Visto isso, sejam as equações:
 
 $UCL = \bar{\bar{x}} + A_{2}*\bar{r}$
@@ -88,6 +125,3 @@ A_{2} = \frac{20,154 - 19,912}{2,152} = 0,11245
 $$
 
 Dessa forma conclui-se que é possível usar a carta de controle em (a), pode ser considerada como instrumento de controle, já a carta em (b), devido às discrepâncias com relação aos valores, apresentados e tabelados, não é possível confiar nessa carta para avaliar estatisticamente o processo.
-
-
-\newpage
