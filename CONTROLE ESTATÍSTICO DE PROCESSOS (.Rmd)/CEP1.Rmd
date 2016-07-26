@@ -50,99 +50,177 @@ a) Avalie os dados da tabela abaixo e construa o(s) gráfico(s) de controle mais
 b) Qual a premissa principal a ser considerada na construção da carta de controle de individuais (X-barra) e de subgrupos (X-barra-barra)?
 
 ###Resposta letra a)
-
+Inicia-se a avaliação dos dados da tabela acima realizando a descrição dos dados (média, desvio padrão, assimetria, curtose, e gráficos) e testes estatísticos para determinação do intervalo de confiança da média (teste T) e normalidade dos dados (teste Shapiro-Wilk).
 ```{r}
-sumario      <- summary(LQCEP1)
-Desv.Pad     <- sapply(LQCEP1, sd)
-Test.Shapiro <- lapply(LQCEP1, shapiro.test)
-Test.t       <- lapply(LQCEP1, t.test)
-curtose      <- sapply(LQCEP1, kurtosis)
-assimetria   <- sapply(LQCEP1, skewness)
+summary(LQCEP1)
 
+sapply(LQCEP1, sd)
+sapply(LQCEP1, kurtosis)
+sapply(LQCEP1, skewness)
+
+lapply(LQCEP1, shapiro.test)
+
+lapply(LQCEP1, t.test)
 ```
 
-* Plotando os gráficos para análise dos dados
+Seguem os gráficos para avaliação descritiva dos dados.
 
 1. Para a Bomba 1
 
 ```{r, fig.height= 7, fig.width= 11}
 par(mfrow = c(2,2))
-hist(LQCEP1$B1)
-boxplot(LQCEP1$B1)
-plot(density(LQCEP1$B1), col="red")
-qqnorm(LQCEP1$B1)
+hist(LQCEP1$B1,
+     main = "",
+     ylab = "Frequência Absoluta",
+     xlab = "Altura da base / in")
+boxplot(LQCEP1$B1,
+        main = "",
+        ylab = "Altura da base / in",
+        xlab = "B1")
+plot(density(LQCEP1$B1), col="red",
+     main = "",
+     ylab = "Densidade")
+qqnorm(LQCEP1$B1,
+       main = "",
+       ylab = "Quantiles da Amostra",
+       xlab = "Quantiles Teóricos")
 qqline(LQCEP1$B1, col ="red")
 ```
-\newpage
+
 2. Para a Bomba 2
 
 ```{r, fig.height= 8, fig.width= 11}
 par(mfrow = c(2,2))
-hist(LQCEP1$B2)
-boxplot(LQCEP1$B2)
-plot(density(LQCEP1$B2), col="red")
-qqnorm(LQCEP1$B2)
+hist(LQCEP1$B2,
+     main = "",
+     ylab = "Frequência Absoluta",
+     xlab = "Altura da base / in")
+boxplot(LQCEP1$B2,
+        main = "",
+        ylab = "Altura da base / in",
+        xlab = "B2")
+plot(density(LQCEP1$B2), col="red",
+     main = "",
+     ylab = "Densidade")
+qqnorm(LQCEP1$B2,
+       main = "",
+       ylab = "Quantiles da Amostra",
+       xlab = "Quantiles Teóricos")
 qqline(LQCEP1$B2, col ="red")
 ```
-\newpage
+
 3. Para a Bomba 3
 
 ```{r, fig.height= 8, fig.width= 11}
 par(mfrow = c(2,2))
-hist(LQCEP1$B3)
-boxplot(LQCEP1$B3)
-plot(density(LQCEP1$B3), col="red")
-qqnorm(LQCEP1$B3)
+hist(LQCEP1$B3,
+     main = "",
+     ylab = "Frequência Absoluta",
+     xlab = "Altura da base / in")
+boxplot(LQCEP1$B3,
+        main = "",
+        ylab = "Altura da base / in",
+        xlab = "B3")
+plot(density(LQCEP1$B3), col="red",
+     main = "",
+     ylab = "Densidade")
+qqnorm(LQCEP1$B3,
+       main = "",
+       ylab = "Quantiles da Amostra",
+       xlab = "Quantiles Teóricos")
 qqline(LQCEP1$B3, col ="red")
 ```
-\newpage
+
 4. Para a Bomba 4
 
 ```{r, fig.height= 8, fig.width= 11}
 par(mfrow = c(2,2))
-hist(LQCEP1$B4)
-boxplot(LQCEP1$B4)
-plot(density(LQCEP1$B4), col="red")
-qqnorm(LQCEP1$B4)
+hist(LQCEP1$B4,
+     main = "",
+     ylab = "Frequência Absoluta",
+     xlab = "Altura da base / in")
+boxplot(LQCEP1$B4,
+        main = "",
+        ylab = "Altura da base / in",
+        xlab = "B4")
+plot(density(LQCEP1$B4), col="red",
+     main = "",
+     ylab = "Densidade")
+qqnorm(LQCEP1$B4,
+       main = "",
+       ylab = "Quantiles da Amostra",
+       xlab = "Quantiles Teóricos")
 qqline(LQCEP1$B4, col ="red")
 ```
-\newpage
+
 4. Para a Bomba 5
 
 ```{r, fig.height= 8, fig.width= 11}
 par(mfrow = c(2,2))
-hist(LQCEP1$B5)
-boxplot(LQCEP1$B5)
-plot(density(LQCEP1$B5), col="red")
-qqnorm(LQCEP1$B5)
+hist(LQCEP1$B5,
+     main = "",
+     ylab = "Frequência Absoluta",
+     xlab = "Altura da base / in")
+boxplot(LQCEP1$B5,
+        main = "",
+        ylab = "Altura da base / in",
+        xlab = "B5")
+plot(density(LQCEP1$B5), col="red",
+     main = "",
+     ylab = "Densidade")
+qqnorm(LQCEP1$B5,
+       main = "",
+       ylab = "Quantiles da Amostra",
+       xlab = "Quantiles Teóricos")
 qqline(LQCEP1$B5, col ="red")
 ```
 
-\newpage
-*Análise estatística dos dados usando CEP
-*Plotando as Cartas de Controle individuais
+Avaliação dos dados utilizando gráficos de controle individuais.
 
 ```{r}
-plot.xbar = qcc(LQCEP1$B1, type="xbar.one")
-plot.xbar = qcc(LQCEP1$B2, type="xbar.one")
-plot.xbar = qcc(LQCEP1$B3, type="xbar.one")
-plot.xbar = qcc(LQCEP1$B4, type="xbar.one")
-plot.xbar = qcc(LQCEP1$B5, type="xbar.one")
+plot.xbar <- qcc(LQCEP1$B1,
+                 type="xbar.one",
+                 ylab = "Altura da base / in",
+                 xlab = "Grupo")
+plot.xbar <- qcc(LQCEP1$B2,
+                 type="xbar.one",
+                 ylab = "Altura da base / in",
+                 xlab = "Grupo")
+plot.xbar <- qcc(LQCEP1$B3,
+                 type="xbar.one",
+                 ylab = "Altura da base / in",
+                 xlab = "Grupo")
+plot.xbar <- qcc(LQCEP1$B4,
+                 type="xbar.one",
+                 ylab = "Altura da base / in",
+                 xlab = "Grupo")
+plot.xbar <- qcc(LQCEP1$B5,
+                 type="xbar.one",
+                 ylab = "Altura da base / in",
+                 xlab = "Grupo")
 ```
 
-*Plotando a Carta de Controle x barra de todas as bombas
+Avaliação dos dados utilizando um gráficos de controle para todas as bombas.
+
 ```{r}
-plot.xbar = qcc(LQCEP1, type="xbar")
+plot.xbar = qcc(LQCEP1,
+                type="xbar",
+                ylab = "Altura da base / in",
+                xlab = "Grupo")
 ```
 
-*Plotando a Carta de Controle R barra de todas as bombas 
+Avaliação dos dados utilizando um gráficos de controle R (amplitude) para todas as bombas.
+
 ```{r, fig.height= 7, fig.width= 11}
-plot.R = qcc(LQCEP1, type="R")
+plot.R = qcc(LQCEP1,
+             type="R",
+             ylab = "Altura da base / in",
+             xlab = "Grupo")
+
 process.capability(object = plot.xbar, spec.limits=c(0.825,0.835))
 ```
 
+Os gráficos descritívos permitem a avaliação das amostras de cada bomba quanto ao formato da distribuição e presença de outliers. 134 Nota-se a presença de pontos aberrantes nas amostras das bombas B1, B3 e B4. É possível que a presença destes pontos estaja desviando as respectivas distribuições da normalidade. Utilizou-se o teste de Shapiro-Wilk para obter uma resposta numérica quanto à normlaidade dos dados de cada bomba. Os testes para as bombas 1 e 4 rejeitaram a hipótese nula de normalidade dos dados. 
+
 ###Resposta letra b)
-
-*Para a construção das carlas de controle x-barra e x-barra-barra (R) deve se admitir que os dados estão distribuidos normalmente e que haja aleatoriedade dos dados*
-
-\newpage
+A premissa principal a ser considerada na construção da carta de controle de individuais (X-barra) e de subgrupos (X-barra-barra) é a normalidade e aleatoriedade dos dados.
