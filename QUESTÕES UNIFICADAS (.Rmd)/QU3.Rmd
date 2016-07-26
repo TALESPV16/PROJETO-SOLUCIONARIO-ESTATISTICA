@@ -1,5 +1,85 @@
+---
+output: html_document
+---
+#QUESTÕES UNIFICADAS
+```{r, include=FALSE}
+library("mime")
+library("stringi")
+library("magrittr") 
+library("Rcpp")
+library("evaluate")
+library("digest")
+library("formatR")
+library("highr")
+library("markdown")
+library("stringr")
+library("yaml")
+library("bitops")
+library("caTools")
+library("htmltools")
+library("knitr")
+library("rmarkdown")
+library("e1071")
+library("fBasics")
+library("DAAG")
+library("MASS")
+library("fdth")
+library("dplyr")
+library("moments")
+library("qcc")
+library("rafalib")
+library("reshape2")
+library("survey")
+library("raster")
+library("knitr")
+```
+
 ##QUESTÃO QU3
 O processo de geração e distribuição de vapor, bem como o sistema de co-geração, de uma determinada indústria podem ser representados pela figura 1. O primeiro controlador (PC-1) controla a pressão do sistema de distribuição de vapor de média pressão (15 kgf/cm2) em uma faixa de modo a evitar que fique abaixo de um valor requerido. Para isto, quando ocorre diminuição da pressão do sistema de distribuição de vapor, o controlador PC-1 comanda a abertura de uma válvula redutora de pressão que injeta vapor diretamente na linha de distribuição, sem passar pela turbina. O segundo controlador (PC-2) controla a pressão do sistema de distribuição de vapor em outra faixa, evitando que a pressão fique acima de um valor definido como seguro para o processo. Para fazer esse controle, o PC-2 comanda a abertura de uma válvula de alívio que lança na atmosfera o excesso de vapor, gerando perdas de vapor e, consequentemente, de água e energia.
+
+```{r, echo=FALSE}
+setwd(paste(getwd(),"/DBQU",sep=""))
+
+LQQU3 <- read.table(file = "LQQU3.txt",
+                      header = TRUE)
+LQQU3.1 <- read.table(file = "LQQU3.1.txt",
+                      header = TRUE)
+knitr::kable(LQQU3, align = 'c')
+
+setwd("../")
+```
+
+```{r, echo=FALSE}
+sumario.perda <- as.vector(summary(LQQU3$Perda))
+sd.perda <- as.vector(round(sd(LQQU3$Perda), digits = 2))
+a <- matrix(c(sumario.perda, sd.perda), nrow = 1, ncol = 7)
+
+
+sumario.perda.so <- as.vector(summary(LQQU3.1$Perda))
+sd.perda.so <- as.vector(round(sd(LQQU3.1$Perda), digits = 2))
+b <- matrix(c(sumario.perda.so, sd.perda.so), nrow = 1, ncol = 7)
+
+c <- rbind(a, b)
+rownames(c) <- c("% Perda", "% Perda (sem outlier)")
+colnames(c) <- c("Min", "Q1", "Mediana", "Média", "3Q", "Max", "DesPad")
+knitr::kable(c, align = 'c')
+
+par(mfrow = c(1,2))
+boxplot(x = LQQU3$Perda,
+        xlab = "% Perda",
+        ylab = "Dados")
+boxplot(x = LQQU3.1$Perda,
+        xlab = "% Perda (sem outlier)",
+        ylab = "Dados")
+hist(x = LQQU3$Perda,
+     main = "",
+     xlab = "% Perda",
+     ylab = "Frequência Absoluta")
+hist(x = LQQU3.1$Perda,
+     main = "",
+     xlab = "% Perda (sem outlier)",
+     ylab = "Frequência Absoluta")
+```
 
 A Figura 2 mostra que 40% da perda de vapor pode ser explicada pela relação entre a geração de energia elétrica pelas turbinas, sendo esta e o alívio de vapor as principais fontes de variação a serem analisadas. Na Tabela 1 são apresentados os dados de perda de vapor e consumo de energia elétrica.
 
@@ -23,9 +103,57 @@ e.1. Verifique se essa afirmação é verdadeira considerando os resultados apre
 
 e.2. Proponha um algoritmo para construção de um modelo de regressão multivariado. Considere que variações na temperatura ambiente, pressão na linha de distribuição e percentual de condensado na linha podem causar variações na perda de vapor. Considere a possibilidade de existir diferentes padrões por turno de produção (7-15h, 15-23h, 23-07h), relações não lineares, correlação entre variáveis preditoras, valores aberrantes, etc.
 
-
 ###Resposta letra a)
+```{r}
+n         <- nrow(LQQU3)
+xbarra    <- mean(LQQU3$Perda)
+sd.perda  <- sd(LQQU3$Perda)
+var.perda <- var(LQQU3$Perda)
+alpha = 0.05
+
+LI.mu.perda <- xbarra - qt(p = alpha/2, df = n-1, lower.tail = FALSE)*sd.perda/sqrt(n)
+LS.mu.perda <- xbarra + qt(p = alpha/2, df = n-1, lower.tail = FALSE)*sd.perda/sqrt(n)
+
+LI.var.perda <- ((n-1)*sd.perda^2)/qchisq(0.95, df = n-1, lower.tail = TRUE)
+LS.var.perda <- ((n-1)*sd.perda^2)/qchisq(0.05, df = n-1, lower.tail = TRUE)
+
+a <- matrix(c(LI.mu.perda, LS.mu.perda, LI.var.perda, LS.var.perda), nrow = 2, ncol = 2)
+colnames(a) <- c("Média", "Variância")
+rownames(a) <- c("LI", "LS")
+knitr::kable(a, align = 'c')
+```
 
 ```{r}
-tbvp <- read.delim2("QU3.txt", header = TRUE)
+n         <- nrow(LQQU3.1)
+xbarra    <- mean(LQQU3.1$Perda)
+sd.perda  <- sd(LQQU3.1$Perda)
+var.perda <- var(LQQU3.1$Perda)
+alpha = 0.05
+
+LI.mu.perda <- xbarra - qt(p = alpha/2, df = n-1, lower.tail = FALSE)*sd.perda/sqrt(n)
+LS.mu.perda <- xbarra + qt(p = alpha/2, df = n-1, lower.tail = FALSE)*sd.perda/sqrt(n)
+
+LI.var.perda <- ((n-1)*sd.perda^2)/qchisq(0.95, df = n-1, lower.tail = TRUE)
+LS.var.perda <- ((n-1)*sd.perda^2)/qchisq(0.05, df = n-1, lower.tail = TRUE)
+
+a <- matrix(c(LI.mu.perda, LS.mu.perda, LI.var.perda, LS.var.perda), nrow = 2, ncol = 2)
+colnames(a) <- c("Média (sem outlier)", "Variância (sem outlier)")
+rownames(a) <- c("LI", "LS")
+knitr::kable(a, align = 'c')
 ```
+
+###Resposta letra b)
+A probabilidade que esta amostra tenha perda superior a 25% é:
+```{r}
+T0 <- (25 - mean(LQQU3$Perda))/(sd(LQQU3$Perda)/sqrt(nrow(LQQU3)))
+pt(q = T0, df = nrow(LQQU3.1)-1, lower.tail = FALSE)
+```
+
+A perda de vapor para que 95% da perda seja inferior a 25% é:
+```{r}
+T0 <- qt(p = 0.95, df = nrow(LQQU3.1)-1)
+T0*(sd(LQQU3$Perda)/sqrt(nrow(LQQU3)))+mean(LQQU3$Perda)
+```
+
+
+
