@@ -1,38 +1,99 @@
-##QUESTÃO CEP4
-O conteúdo de cobre, em ppm, de um banho de platina é medido três vezes ao dia e os resultados de X-barra e R são apresentados na tabela abaixo. Sabendo-se que os limites de especificação são 6,0 ± 1,0: 
+---
+output: html_document
+---
+#CONTROLE ESTATÍSTICO DE PROCESSOS
+```{r, include=FALSE}
+library("mime")
+library("stringi")
+library("magrittr") 
+library("Rcpp")
+library("evaluate")
+library("digest")
+library("formatR")
+library("highr")
+library("markdown")
+library("stringr")
+library("yaml")
+library("bitops")
+library("caTools")
+library("htmltools")
+library("knitr")
+library("rmarkdown")
+library("e1071")
+library("fBasics")
+library("DAAG")
+library("MASS")
+library("fdth")
+library("dplyr")
+library("moments")
+library("qcc")
+library("rafalib")
+library("reshape2")
+library("survey")
+library("raster")
+library("knitr")
+library("FrF2")
+```
 
-a) Indique se esse processo está sobre controle (Utilize apenas a regra 1: pontos fora dos limites de controle) e 
+##QUESTÃO CEP4
+O conteúdo de cobre, em ppm, de um banho de platina é medido três vezes ao dia e os resultados de X-barra e R são apresentados na tabela abaixo. Sabendo-se que os limites de especificação são 6,0 ± 1,0:
+
+```{r, echo=FALSE}
+setwd(paste(getwd(),"/DBCEP",sep=""))
+
+LQCEP4.1 <- read.table(file = "LQCEP4.1.txt", header = TRUE)
+knitr::kable(LQCEP4.1, align = 'c')
+
+LQCEP4.2 <- read.table(file = "LQCEP4.2.txt", header = TRUE)
+knitr::kable(LQCEP4.2, align = 'c')
+
+setwd("../")
+```
+
+a) Indique se esse processo está sobre controle (Utilize apenas a regra 1: pontos fora dos limites de controle).
 
 b) Estime a capabilidade do processo e interprete o resultado.
 
-
 ###Resposta letra a)
-
 ```{r}
-(dados <- read.delim2("CEP4.txt", header =  TRUE, sep = "\t"))
-
-plot(dados$XBarra, type = "l", col = "grey", xlab ="Dia",
+plot(LQCEP4.1$x.barra,
+     type = "l",
+     col  = "brown",
+     xlab ="Dia",
      ylab = "ppm Cu",
      main = "X-Barra ppm Cu")
-points(dados$XBarra, pch = 20)
-LSC <- lines.default(rep(7, length(dados$XBarra)), col = "red")
-LIC <- lines.default(rep(5, length(dados$XBarra)), col = "red")
+points(LQCEP4.1$x.barra, pch = 20)
+LSC <- lines.default(rep(7, length(LQCEP4.1$x.barra)), col = "red")
+LC  <- lines.default(rep(6, length(LQCEP4.1$x.barra)), col = "red")
+LIC <- lines.default(rep(5, length(LQCEP4.1$x.barra)), col = "red")
 
-
-mediar <- mean(dados$R)
+mediar <- mean(LQCEP4.1$R)
 D3 <- 0
 D4 <- 2.28
-plot(dados$R, type = "l", col = "grey", xlab ="Dia",
-     ylab = "ppm Cu", axes = F,
+plot(LQCEP4.1$R,
+     type = "l",
+     col = "brown",
+     xlab ="Dia",
+     ylab = "ppm Cu",
      main = "R-Barra ppm Cu")
-axis(1, at = seq(1,length(dados$R), by = 1, pos = 1))
-axis(2, at = seq(0,3,by = 0.01))
-points(dados$R, pch = 20)
-LSC <- lines.default(rep(mediar*D4, length(dados$R)), col = "red")
-LIC <- lines.default(rep(mediar*D3, length(dados$R)), col = "red")
-
-mediaXB <-mean(dados$XBarra)
-
+points(LQCEP4.1$R, pch = 20)
+LSC <- lines.default(rep(mediar*D4, length(LQCEP4.1$R)), col = "red")
+LC  <- lines.default(rep(mediar, length(LQCEP4.1$R)), col = "red")
+LIC <- lines.default(rep(mediar*D3, length(LQCEP4.1$R)), col = "red")
 ```
 
-\newpage
+Utiliazando os gráficos x-barra e R-barra para avaliar o conteúdo de cobre, em ppm, de um banho de platina é possível concluir que a média das amostras medidas três vezes ao dias não está sob controle estatístico segundo a regra 1 devido à presença de pontos acima dos limite superior de controle.
+
+###Resposta letra b)
+```{r}
+qcc.options(run.length = 7)
+CEP4.xbar <- qcc(data = LQCEP4.1$x.barra,
+            type = "xbar.one",
+            limits = c(5, 7),
+            center = 6,
+            ylab = "ppm Cu",
+            xlab = "Dia")
+
+process.capability(object = CEP4.xbar,
+                   spec.limits = c(5, 7))
+```
