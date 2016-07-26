@@ -36,7 +36,9 @@ library("FrF2")
 ```
 
 ##QUESTÃO CEP2
-O programa Águapura vem atuando na redução do consumo de água da UFBA, tendo obtido resultados significativos através de um acompanhamento sistemático vianet do consumo porunidade [](http://teclim.ufba.br/aguapura/index.php), ver exemplo abaixo. Considerando conceitos da estatística,
+O programa Águapura vem atuando na redução do consumo de água da UFBA, tendo obtido resultados significativos através de um acompanhamento sistemático vianet do consumo porunidade [](http://teclim.ufba.br/aguapura/index.php), ver exemplo abaixo. Considerando conceitos da estatística:
+
+**Falta Adicionar as imagens da questão!**
 
 a) Proponha outra(s) forma(s) de acompanhamento do consumo de água da UFBA. 
 
