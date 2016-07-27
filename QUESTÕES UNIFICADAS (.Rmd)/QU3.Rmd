@@ -1,5 +1,7 @@
 ---
-output: html_document
+output: 
+  html_document: 
+    toc_depth: 6
 ---
 #QUESTÕES UNIFICADAS
 ```{r, include=FALSE}
@@ -207,7 +209,7 @@ round(Z0*(sd(LQQU3.1$Perda)/sqrt(nrow(LQQU3.1)))+mean(LQQU3.1$Perda), digits = 3
 ```
 
 ###Resposta letra c)
-**c.(a)**
+#### c (a)
 
 Considerando a amostra original de dados de perdad de vapor em %, o tamanho da amostra necessário para a cosntrução de um intervalo com 95% de confiânça e com erro inferior a 0,5% é:
 
@@ -229,8 +231,7 @@ print(round(n))
 
 Nota-se a redução significativa do tamanho de amostra necessário com a retirada dos outliers.
 
-**c.(b)**
-
+#### c (b)
 Com o objetivo de verificar a necessidade de alteração do procedimento realizou-se testes de hipótese para a média dos conjuntos de dados com e sem outliers.
 
 ```{r}
@@ -272,7 +273,7 @@ z.test(x = LQQU3.1$Perda,
 O aumento do nível de confiânça (diminuição do nível de significância alpha) torna inviável a rejeição da hipótese nula na qual a perda de vapor é igual a 18% para ambos os casos (com e sem outlier). Isso significa que, com base na teoria de teste de hipótese, é necessário alterar este procedimento, pois a média verdadeira da perda de vapor não será inferior a 18% em 99% das amostragens.
 
 ###Resposta letra d)
-**d.1**
+#### d.1
 
 Com base na análise do modelo de regressão linear, na tabela de análise da variância e nos gráficos apresentados é possível concluir que existe uma correlação linear entre a perda de vapor (t/mês) e produção de vapor (t/mês).
 
@@ -315,5 +316,5 @@ points(modelo.QU3$residuals, pch = 20, col = "red")
 lines.default(rep(0, 9000), col = "black")
 ```
 
-**d.2**
+#### d.2
 
