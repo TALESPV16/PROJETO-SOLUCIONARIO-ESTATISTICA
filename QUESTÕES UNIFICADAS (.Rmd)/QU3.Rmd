@@ -32,10 +32,13 @@ library("reshape2")
 library("survey")
 library("raster")
 library("knitr")
+library("BSDA")
 ```
 
 ##QUESTÃO QU3
 O processo de geração e distribuição de vapor, bem como o sistema de co-geração, de uma determinada indústria podem ser representados pela figura 1. O primeiro controlador (PC-1) controla a pressão do sistema de distribuição de vapor de média pressão (15 kgf/cm2) em uma faixa de modo a evitar que fique abaixo de um valor requerido. Para isto, quando ocorre diminuição da pressão do sistema de distribuição de vapor, o controlador PC-1 comanda a abertura de uma válvula redutora de pressão que injeta vapor diretamente na linha de distribuição, sem passar pela turbina. O segundo controlador (PC-2) controla a pressão do sistema de distribuição de vapor em outra faixa, evitando que a pressão fique acima de um valor definido como seguro para o processo. Para fazer esse controle, o PC-2 comanda a abertura de uma válvula de alívio que lança na atmosfera o excesso de vapor, gerando perdas de vapor e, consequentemente, de água e energia.
+
+![Figura 1: Fluxograma simplificado do sistema de geração e distribuição de vapor e cogeração.](QU3.FLUXOGRAMA.JPG)
 
 ```{r, echo=FALSE}
 setwd(paste(getwd(),"/DBQU",sep=""))
@@ -81,7 +84,7 @@ hist(x = LQQU3.1$Perda,
      ylab = "Frequência Absoluta")
 ```
 
-**Adicionar figura da questão!**
+![Figura 2: Gráfico de correlação entre as perdas de vapor e a geração de energia elétrica pelas turbinas.](QU3.CORRELACAO.JPG)
 
 A Figura 2 mostra que 40% da perda de vapor pode ser explicada pela relação entre a geração de energia elétrica pelas turbinas, sendo esta e o alívio de vapor as principais fontes de variação a serem analisadas. Na Tabela 1 são apresentados os dados de perda de vapor e consumo de energia elétrica.
 
@@ -98,6 +101,7 @@ d.1. Verifique se essa afirmação é verdadeira considerando os resultados apre
 ```{r, echo=FALSE}
 modelo.QU3 <- lm(formula = Perda.Total ~ Producao.Total, data = LQQU3)
 summary(modelo.QU3)
+anova(object = modelo.QU3)
 
 par(mfrow = c(2,2))
 qqnorm(modelo.QU3$residuals, pch = 20, col = "red")
@@ -128,6 +132,8 @@ d.2. Proponha um algoritmo para construção de um modelo de regressão multivar
 
 ###Resposta letra a)
 ```{r}
+# Estimativa do intervalo de confiânça para média e variância para o conjunto total de dados de perda de vapor (%).
+
 n         <- nrow(LQQU3)
 xbarra    <- mean(LQQU3$Perda)
 sd.perda  <- sd(LQQU3$Perda)
@@ -144,9 +150,13 @@ a <- matrix(c(LI.mu.perda, LS.mu.perda, LI.var.perda, LS.var.perda), nrow = 2, n
 colnames(a) <- c("Média", "Variância")
 rownames(a) <- c("LI", "LS")
 knitr::kable(a, align = 'c')
+
+shapiro.test(LQQU3$Perda)
 ```
 
 ```{r}
+# Estimativa do intervalo de confiânça para média e variância para o conjunto de dados de perda de vapor (%) sem outliers.
+
 n         <- nrow(LQQU3.1)
 xbarra    <- mean(LQQU3.1$Perda)
 sd.perda  <- sd(LQQU3.1$Perda)
@@ -163,57 +173,97 @@ a <- matrix(c(LI.mu.perda, LS.mu.perda, LI.var.perda, LS.var.perda), nrow = 2, n
 colnames(a) <- c("Média (sem outlier)", "Variância (sem outlier)")
 rownames(a) <- c("LI", "LS")
 knitr::kable(a, align = 'c')
+
+shapiro.test(LQQU3.1$Perda)
 ```
+
+Estimou-se as estatísticas descritivas de média e variância dos dados referentes a perda de vapor com e sem a presença de outliers. Nota-se que a presença do outlier provoca o aumento dos valores da média e variância (e da amplitude de seus intervalos de confiânça) da perda de vapor. A observação dos histogramas e boxplotes permite a realização de uma análise qualitativa quanto ao formato da distribuição dos dados. Nota-se que a presença do outlier afasta a distribuição da normalidade alongando a cauda à direita. Realizou-se o teste de Shapiro-Wilk com o objeetivo de se obter uma resposta quantitativa para a análise da normalidade das duas distribuições. O teste de Shapiro-Wilk confirma o desvio da normalidade gerado pela preseça do outlier.
 
 ###Resposta letra b)
-A probabilidade que esta amostra tenha perda superior a 25% é:
+A probabilidade que a amostra original de dados de perda de vapor em % tenha perda superior a 25% é:
+
 ```{r}
-T0 <- (25 - mean(LQQU3$Perda))/(sd(LQQU3$Perda)/sqrt(nrow(LQQU3)))
-pt(q = T0, df = nrow(LQQU3.1)-1, lower.tail = FALSE)
+round(pnorm(q = 25, mean = mean(LQQU3$Perda), sd = sd(LQQU3$Perda), lower.tail = FALSE), digits = 3)
 ```
 
-A perda de vapor para que 95% da perda seja inferior a 25% é:
+Já a probabilidade que a amostra sem a presença do outlier tenha perda superior a 25% é:
+
 ```{r}
-T0 <- qt(p = 0.95, df = nrow(LQQU3.1)-1)
-round(T0*(sd(LQQU3$Perda)/sqrt(nrow(LQQU3)))+mean(LQQU3$Perda), digits = 2)
+round(pnorm(q = 25, mean = mean(LQQU3.1$Perda), sd = sd(LQQU3.1$Perda), lower.tail = FALSE), digits = 3)
+```
+
+Considerando a amostra original, a perda de vapor para que 95% da perda seja inferior a 25% é:
+
+```{r}
+Z0 <- qnorm(p = 0.95)
+round(Z0*(sd(LQQU3$Perda)/sqrt(nrow(LQQU3)))+mean(LQQU3$Perda), digits = 3)
+```
+
+Considerando a amostra sem a presença de outliers, a perda de vapor para que 95% da perda seja inferior a 25% é:
+
+```{r}
+Z0 <- qnorm(p = 0.95)
+round(Z0*(sd(LQQU3.1$Perda)/sqrt(nrow(LQQU3.1)))+mean(LQQU3.1$Perda), digits = 3)
 ```
 
 ###Resposta letra c)
 **c.(a)**
+
+Considerando a amostra original de dados de perdad de vapor em %, o tamanho da amostra necessário para a cosntrução de um intervalo com 95% de confiânça e com erro inferior a 0,5% é:
+
 ```{r}
-E <- 0.5
-n <- ((qt(p = 0.05/2, df = nrow(LQQU3)-1, lower.tail = FALSE)*sd(LQQU3$Perda))/E)^2
+erro <- 0.5
+n    <- ((qnorm(p = 0.05/2, lower.tail = TRUE)*sd(LQQU3$Perda))/erro)^2
+
 print(round(n))
 ```
 
-**c.(b)**
+Se considerarmos a amostra sem a presença de outliers, o tamanho da amostra necessário para a cosntrução de um intervalo com 95% de confiânça e com erro inferior a 0,5% é:
+
 ```{r}
-t.test(x = LQQU3$Perda,
+erro <- 0.5
+n    <- ((qnorm(p = 0.05/2, lower.tail = TRUE)*sd(LQQU3.1$Perda))/erro)^2
+
+print(round(n))
+```
+
+Nota-se a redução significativa do tamanho de amostra necessário com a retirada dos outliers.
+
+**c.(b)**
+
+Com o objetivo de verificar a necessidade de alteração do procedimento realizou-se testes de hipótese para a média dos conjuntos de dados com e sem outliers.
+
+```{r}
+z.test(x = LQQU3$Perda,
+       sigma.x = sd(LQQU3$Perda),
        mu = 18,
        alternative = "less",
        conf.level = 0.95)
 
-t.test(x = LQQU3.1$Perda,
+z.test(x = LQQU3.1$Perda,
+       sigma.x = sd(LQQU3$Perda),
        mu = 18,
        alternative = "less",
        conf.level = 0.95)
 ```
 
-Realizou-se um teste T para avaliar se a perda média de vapor da unidade é inferior a 18%. Os testes foram realizados considerando os dados com e sem a presença de outliers.
+Realizou-se um teste Z para avaliar se a perda média de vapor da unidade é inferior a 18%. Os testes foram realizados considerando os dados com e sem a presença de outliers.
 
-O teste T, para o conjunto total de dados, falhou em rejeitar a hipótese nula na qual a perda de vapor é igual a 18%. Com base na teoria de teste de hipótese este procedimento deve ser alterado, pois não é possível afirmar que a média da perda de vapor é inferior a 18%.
+O teste Z, para o conjunto total de dados, falhou em rejeitar a hipótese nula na qual a perda de vapor é igual a 18%. Com base na teoria de teste de hipótese este procedimento deve ser alterado, pois não é possível afirmar que a média da perda de vapor é inferior a 18%.
 
-Já o teste T, para o conjunto de dados sem outliers, rejeitou a hipótese nula na qual a perda de vapor é igual a 18%. Com base na teoria de teste de hipótese não é necessário alterar este procedimento, pois a média verdadeira da perda de vapor será inferior a 18% em 95% das amostragens.
+Já o teste Z, para o conjunto de dados sem outliers, rejeitou a hipótese nula na qual a perda de vapor é igual a 18%. Com base na teoria de teste de hipótese não é necessário alterar este procedimento, pois a média verdadeira da perda de vapor será inferior a 18% em 95% das amostragens.
 
 Construiu-se o código abaixo para avaliar a influência da alteração do nível de confiança para 99% sobre os erros do tipo 1 para este sistema.
 
 ```{r}
-t.test(x = LQQU3$Perda,
+z.test(x = LQQU3$Perda,
+       sigma.x = sd(LQQU3$Perda),
        mu = 18,
        alternative = "less",
        conf.level = 0.99)
 
-t.test(x = LQQU3.1$Perda,
+z.test(x = LQQU3.1$Perda,
+       sigma.x = sd(LQQU3$Perda),
        mu = 18,
        alternative = "less",
        conf.level = 0.99)
@@ -222,3 +272,48 @@ t.test(x = LQQU3.1$Perda,
 O aumento do nível de confiânça (diminuição do nível de significância alpha) torna inviável a rejeição da hipótese nula na qual a perda de vapor é igual a 18% para ambos os casos (com e sem outlier). Isso significa que, com base na teoria de teste de hipótese, é necessário alterar este procedimento, pois a média verdadeira da perda de vapor não será inferior a 18% em 99% das amostragens.
 
 ###Resposta letra d)
+**d.1**
+
+Com base na análise do modelo de regressão linear, na tabela de análise da variância e nos gráficos apresentados é possível concluir que existe uma correlação linear entre a perda de vapor (t/mês) e produção de vapor (t/mês).
+
+O modelo de regressão linear proposto apresenta dois coeficientes: o linear (*Intercept*) e o angular (*Producao.Total*). O teste de hipótese realizado para avaliar a significância dos coeficientes do modelo de regressão se mostrou significativo para o coeficiente angular (*Producao.Total*), com um p-valor inferir ao nível de significância de 0.05. Já o teste de hipótese para a significância do coeficiente linear falhou em rejeitar a hipóse nula na qual o coeficiente é igual a zero. O modelo de regressão proposto apresenta R^2^ ajustado de `r round(summary(modelo.QU3)$adj.r.squared, digits = 3)`, indicando a porcentagem de perda total de vapor que pode ser explicado pelo presente modelo.
+
+Através da inspeção da tabela de análises da variância (ANOVA) é possível concluir que o modelo de regressão proposto é significativo quanto à correlação entre *Produção.Total* e *Perda.Total*, devido ao resultado do p-valor (`r round(anova(object = modelo.QU3)$P[1], digits = 3)`) ser infeior ao nível de significância de 0,05.
+
+Os gráficos aptresentados na questão são fundamentais na etapa de validação estatística do modelo de regressão. A validação da significância estatística do modelo de regressão imprescinde da normalidade e aleatoriedade dos respiduos. Como já foi discutido, o conjunto de dados original apresenta valores aberrantes que desviam a distribuição dos dados da normalidade. Logo, é possível notar um desvio da normalidade por parte dos resíduos do modelo de regressão.
+
+Abaixo segue o código para costrução e validação de um novo modelo de regressão utilizando o conjunto de dados sem a presença de outliers e eliminando o coeficiente linear do modelo de regressão. O resultado é um modelo de regressão mais ajustado e validado.
+
+```{r}
+modelo.QU3 <- lm(formula = Perda.Total ~ -1 + Producao.Total, data = LQQU3.1)
+summary(modelo.QU3)
+anova(object = modelo.QU3)
+shapiroTest(modelo.QU3$residuals)
+
+par(mfrow = c(2,2))
+qqnorm(modelo.QU3$residuals, pch = 20, col = "red")
+qqline(y = modelo.QU3$residuals, col = 4, lwd=1,lty=2)
+plot(x = modelo.QU3$fitted.values, y = modelo.QU3$residuals,
+     main = "Resíduos X Valores Ajustados",
+     ylab = "Resíduos",
+     xlab = "Valores Ajustados",
+     pch = 20,
+     col = "red")
+lines.default(rep(0, 9000), col = "black")
+hist(x = modelo.QU3$residuals,
+     main = "Histograma dos Resíduos",
+     ylab = "Frequência Absoluta",
+     xlab = "Resíduos",
+     col = "grey")
+plot(x = seq(1,nrow(LQQU3.1)), y = modelo.QU3$residuals,
+     main = "Resíduos X Observação",
+     ylab = "Resíduos",
+     xlab = "Observação",
+     type = "l",
+     col = "blue")
+points(modelo.QU3$residuals, pch = 20, col = "red")
+lines.default(rep(0, 9000), col = "black")
+```
+
+**d.2**
+
