@@ -98,4 +98,4 @@ process.capability(object = CEP4.xbar,
                    spec.limits = c(5, 7))
 ```
 
-O gráfico de análise da capacidade do processo apresenta os valores calculados para os parâmetros Cp e Cpk. Nota-se que devido à equidistância entre o alvo (*Target*) e os limites de especificação, os valores de Cp e Cpk são equivalente. O valor de Cp é inferior a 1, indicando que a variabilidade do processo é maior que a variabilidade permitida pelos limites de especificação. De forma geral quando maior for os valores dos parâmetros Cp e Cpk, mais capaz (melhor) será o processo.
+O gráfico de análise da capacidade do processo apresenta os valores calculados para os parâmetros Cp e Cpk. Nota-se que devido à equidistância entre o alvo (*Target*) e os limites de especificação, os valores de Cp e Cpk são equivalentes. O valor de Cp é inferior a 1, indicando que a variabilidade do processo é maior que a variabilidade permitida pelos limites de especificação. De forma geral quando maior for os valores dos parâmetros Cp e Cpk, mais capaz (melhor) será o processo.
