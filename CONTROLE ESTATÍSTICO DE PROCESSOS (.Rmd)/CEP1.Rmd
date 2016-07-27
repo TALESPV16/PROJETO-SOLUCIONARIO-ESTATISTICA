@@ -32,7 +32,7 @@ plot(density(dataCEP$B1), col="red")
 qqnorm(dataCEP$B1)
 qqline(dataCEP$B1, col ="red")
 ```
-\newpage
+
 2. Para a Bomba 2
 
 ```{r, fig.height= 8, fig.width= 11}
@@ -43,7 +43,7 @@ plot(density(dataCEP$B2), col="red")
 qqnorm(dataCEP$B2)
 qqline(dataCEP$B2, col ="red")
 ```
-\newpage
+
 3. Para a Bomba 3
 
 ```{r, fig.height= 8, fig.width= 11}
@@ -54,7 +54,7 @@ plot(density(dataCEP$B3), col="red")
 qqnorm(dataCEP$B3)
 qqline(dataCEP$B3, col ="red")
 ```
-\newpage
+
 4. Para a Bomba 4
 
 ```{r, fig.height= 8, fig.width= 11}
@@ -65,7 +65,7 @@ plot(density(dataCEP$B4), col="red")
 qqnorm(dataCEP$B4)
 qqline(dataCEP$B4, col ="red")
 ```
-\newpage
+
 4. Para a Bomba 5
 
 ```{r, fig.height= 8, fig.width= 11}
@@ -104,4 +104,4 @@ process.capability(object = plot.xbar, spec.limits=c(0.825,0.835))
 
 *Para a construção das carlas de controle x-barra e x-barra-barra (R) deve se admitir que os dados estão distribuidos normalmente e que haja aleatoriedade dos dados*
 
-\newpage
+
