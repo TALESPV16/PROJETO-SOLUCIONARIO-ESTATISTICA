@@ -220,7 +220,7 @@ plot.R = qcc(LQCEP1,
 process.capability(object = plot.xbar, spec.limits=c(0.825,0.835))
 ```
 
-Os gráficos descritívos permitem a avaliação das amostras de cada bomba quanto ao formato da distribuição e presença de outliers. 134 Nota-se a presença de pontos aberrantes nas amostras das bombas B1, B3 e B4. É possível que a presença destes pontos estaja desviando as respectivas distribuições da normalidade. Utilizou-se o teste de Shapiro-Wilk para obter uma resposta numérica quanto à normlaidade dos dados de cada bomba. Os testes para as bombas 1 e 4 rejeitaram a hipótese nula de normalidade dos dados. 
+Os gráficos descritivos permitem a avaliação das amostras de cada bomba quanto ao formato da distribuição e presença de outliers. Nota-se a presença de pontos aberrantes nas amostras das bombas B1, B3 e B4. É possível que a presença destes pontos estaja desviando as respectivas distribuições da normalidade. Utilizou-se o teste de Shapiro-Wilk para obter uma resposta numérica quanto à normalidade dos dados de cada bomba. Os testes para as bombas 1 e 4 rejeitaram a hipótese nula de normalidade dos dados. 
 
 ###Resposta letra b)
 A premissa principal a ser considerada na construção da carta de controle de individuais (X-barra) e de subgrupos (X-barra-barra) é a normalidade e aleatoriedade dos dados.
