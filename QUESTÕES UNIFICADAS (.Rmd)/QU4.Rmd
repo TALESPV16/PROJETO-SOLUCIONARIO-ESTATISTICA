@@ -46,7 +46,33 @@ Sólidos totais, turbidez, fósforo total, nitrogênio amoniacal, nitrogênio to
 
 ![Figura 1: Pontos de monitoramento](QU4.PONTOS.MONITORAMENTO.JPG)
 
+![Figura 2: Dotplot dos principais parâmetros monitorados nas épocas úmida (1) e seca (2).](QU4.DOTPLOT.JPG)
+
+![Figura 3: Matriz de correlação considerando o conjunto total de dados (época seca + úmida).](QU4.CORRELACAO.JPG)
+
+![Figura 4: Boxplot considerando o conjunto total de dados (época seca + úmida) no ponto 6.](QU4.BOXPLOT.JPG)
+
+![Figura 5: Dot plot do IET considerando o conjunto total de dados (época seca + úmida) no ponto 6.](QU4.DOTPLOT.IET.JPG)
+
+![Figura 6: Série histórica do índice de eutrofização considerando o conjunto total de dados (época seca + úmida) no ponto 6.](QU4.FIGURA6.JPG)
+
+![Figura 7: Boxplot do IET considerando o conjunto total de dados (época seca + úmida).](QU4.BOXPLOT.IET.JPG)
+
 a)  Considerando novos dados de monitoramento levantados para o ano de 2012 apresentados no Quadro 2:
+
+```{r, echo=FALSE}
+setwd(paste(getwd(),"/DBQU",sep=""))
+
+LQQU4.1 <- read.table(file = "LQQU4.1.txt",
+                      header = TRUE)
+knitr::kable(LQQU4.1, align = 'c')
+
+LQQU4.2 <- read.table(file = "LQQU4.2.txt",
+                      header = TRUE)
+knitr::kable(LQQU4.2, align = 'c')
+
+setwd("../")
+```
 
 a.1.) Compare se há mudanças no estado de eutrofização do rio para os períodos seco e úmido considerando a avaliação de intervalos de confiança do IET e nível de significância de 10%.
 
@@ -58,5 +84,66 @@ b.1. Qual a probabilidade de uma amostra selecionada ao acaso apresentar valores
 
 b.2. Uma análise específica será realizada considerando dados com maior probabilidade de ocorrência. Qual o valor limite de IET caso deseje-se considerar nesta análise dados com probabilidade superior a 80%?
 
+###Resposta letra a)
+####Resposta letra a.1)
+Comparaou-se os períodos seco e úmido quanto ao estado de eutrofização do rio através da avaliação dos intervalos de confiânça para as médias utilizando a distrinuição T.
 
+```{r}
+LI.seco <- LQQU4.2$IET.seco[LQQU4.2$Variavel=="Media"] - qt(p = 0.1/2, df = LQQU4.2$IET.seco[LQQU4.2$Variavel=="N"]-1, lower.tail = FALSE)*LQQU4.2$IET.seco[LQQU4.2$Variavel=="DP"]/sqrt(LQQU4.2$IET.seco[LQQU4.2$Variavel=="N"])
+
+LS.seco <- LQQU4.2$IET.seco[LQQU4.2$Variavel=="Media"] + qt(p = 0.1/2, df = LQQU4.2$IET.seco[LQQU4.2$Variavel=="N"]-1, lower.tail = FALSE)*LQQU4.2$IET.seco[LQQU4.2$Variavel=="DP"]/sqrt(LQQU4.2$IET.seco[LQQU4.2$Variavel=="N"])
+
+LI.umido <- LQQU4.2$IET.umido[LQQU4.2$Variavel=="Media"] - qt(p = 0.1/2, df = LQQU4.2$IET.umido[LQQU4.2$Variavel=="N"]-1, lower.tail = FALSE)*LQQU4.2$IET.umido[LQQU4.2$Variavel=="DP"]/sqrt(LQQU4.2$IET.umido[LQQU4.2$Variavel=="N"])
+
+LS.umido <- LQQU4.2$IET.umido[LQQU4.2$Variavel=="Media"] + qt(p = 0.1/2, df = LQQU4.2$IET.umido[LQQU4.2$Variavel=="N"]-1, lower.tail = FALSE)*LQQU4.2$IET.umido[LQQU4.2$Variavel=="DP"]/sqrt(LQQU4.2$IET.umido[LQQU4.2$Variavel=="N"])
+
+a <- matrix(c(LI.seco, LS.seco, LI.umido, LS.umido), nrow = 2, ncol = 2)
+colnames(a) <- c("IET.seco", "IET.umido")
+rownames(a) <- c("LI", "LS")
+knitr::kable(a, align = 'c')
+```
+
+A tabela acima mostra a sobreposição dos intervals de confiânça para o índice de eutrofização dos periodos seco e úmido. A sobreposição dos intervalos indica que não há diferença significativa entres os períodos.
+
+####Resposta letra a.2)
+
+```{r}
+LI.seco.Cl <- LQQU4.2$Clorofila.seco[LQQU4.2$Variavel=="Media"] - qt(p = 0.1/2, df = LQQU4.2$Clorofila.seco[LQQU4.2$Variavel=="N"]-1, lower.tail = FALSE)*LQQU4.2$Clorofila.seco[LQQU4.2$Variavel=="DP"]/sqrt(LQQU4.2$Clorofila.seco[LQQU4.2$Variavel=="N"])
+
+LS.seco.Cl <- LQQU4.2$Clorofila.seco[LQQU4.2$Variavel=="Media"] + qt(p = 0.1/2, df = LQQU4.2$Clorofila.seco[LQQU4.2$Variavel=="N"]-1, lower.tail = FALSE)*LQQU4.2$Clorofila.seco[LQQU4.2$Variavel=="DP"]/sqrt(LQQU4.2$Clorofila.seco[LQQU4.2$Variavel=="N"])
+
+LI.umido.Cl <- LQQU4.2$Clorofila.umido[LQQU4.2$Variavel=="Media"] - qt(p = 0.1/2, df = LQQU4.2$Clorofila.umido[LQQU4.2$Variavel=="N"]-1, lower.tail = FALSE)*LQQU4.2$Clorofila.umido[LQQU4.2$Variavel=="DP"]/sqrt(LQQU4.2$Clorofila.umido[LQQU4.2$Variavel=="N"])
+
+LS.umido.Cl <- LQQU4.2$Clorofila.umido[LQQU4.2$Variavel=="Media"] + qt(p = 0.1/2, df = LQQU4.2$Clorofila.umido[LQQU4.2$Variavel=="N"]-1, lower.tail = FALSE)*LQQU4.2$Clorofila.umido[LQQU4.2$Variavel=="DP"]/sqrt(LQQU4.2$Clorofila.umido[LQQU4.2$Variavel=="N"])
+
+LI.seco.P <- LQQU4.2$Fosfato.seco[LQQU4.2$Variavel=="Media"] - qt(p = 0.1/2, df = LQQU4.2$Fosfato.seco[LQQU4.2$Variavel=="N"]-1, lower.tail = FALSE)*LQQU4.2$Fosfato.seco[LQQU4.2$Variavel=="DP"]/sqrt(LQQU4.2$Fosfato.seco[LQQU4.2$Variavel=="N"])
+
+LS.seco.P <- LQQU4.2$Fosfato.seco[LQQU4.2$Variavel=="Media"] + qt(p = 0.1/2, df = LQQU4.2$Fosfato.seco[LQQU4.2$Variavel=="N"]-1, lower.tail = FALSE)*LQQU4.2$Fosfato.seco[LQQU4.2$Variavel=="DP"]/sqrt(LQQU4.2$Fosfato.seco[LQQU4.2$Variavel=="N"])
+
+LI.umido.P <- LQQU4.2$Fosfato.umido[LQQU4.2$Variavel=="Media"] - qt(p = 0.1/2, df = LQQU4.2$Fosfato.umido[LQQU4.2$Variavel=="N"]-1, lower.tail = FALSE)*LQQU4.2$Fosfato.umido[LQQU4.2$Variavel=="DP"]/sqrt(LQQU4.2$Fosfato.umido[LQQU4.2$Variavel=="N"])
+
+LS.umido.P <- LQQU4.2$Fosfato.umido[LQQU4.2$Variavel=="Media"] + qt(p = 0.1/2, df = LQQU4.2$Fosfato.umido[LQQU4.2$Variavel=="N"]-1, lower.tail = FALSE)*LQQU4.2$Fosfato.umido[LQQU4.2$Variavel=="DP"]/sqrt(LQQU4.2$Fosfato.umido[LQQU4.2$Variavel=="N"])
+
+b <- matrix(c(LI.seco.Cl, LS.seco.Cl, LI.umido.Cl, LS.umido.Cl, LI.seco.P, LS.seco.P, LI.umido.P, LS.umido.P), nrow = 2, ncol = 4)
+colnames(b) <- c("Cl.seco", "Cl.umido", "P.seco", "P.umido")
+rownames(b) <- c("LI", "LS")
+knitr::kable(b, align = 'c')
+```
+
+A tabela acima mostra a sobreposição dos intervals de confiânça para a concentração de clorofila dos periodos seco e úmido. A sobreposição dos intervalos indica que não há diferença significativa entres os períodos.
+
+A tabela também apresenta a não sobreposição dos intervals de confiânça para a concentração de fosfato dos periodos seco e úmido, indicando a diferênça significativa entre os dois períodos.
+
+###Resposta letra b)
+####Resposta letra b.1)
+
+```{r}
+47
+52
+59
+63
+67
+
+ultra <- pt(q = 47, df = )
+```
 

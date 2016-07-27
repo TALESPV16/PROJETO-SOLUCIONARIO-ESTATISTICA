@@ -1,0 +1,7 @@
+Variavel	Clorofila.seco	Clorofila.umido	Fosfato.seco	Fosfato.umido	IET.seco	IET.umido
+N	29	27	40	39	35	32
+Media	17.66	14.6	0.02	0.0375	59.279	57.488
+DP	18.03	9.79	0.01483	0.02121	4.964	4.618
+Q1	2.55	5.64	0.01	0.02	55.667	55.742
+Mediana	10.56	15.38	0.02	0.03	60.293	58.168
+Q3	34.22	22.3	0.02	0.0625	62.958	60.634
