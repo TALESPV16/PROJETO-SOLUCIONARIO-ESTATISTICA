@@ -43,7 +43,7 @@ Dois gráficos de controle (a) e (b) foram construídos considerando dados de su
 a) Analise criticamente estes gráficos de controle e discuta se eles poderiam ser utilizados para o acompanhamento de processos.
 
 ###Resposta letra a)
-Os gráficos de controle em (a) contém um erro no LIC, e a quantidade 2$\sigma$ difere em 0,001 da mesma quantidade do LSC, ainda sim não há significativa diferença ao obsevar que, o valor do coeficiente $A_{2}$ tabelado para n = 5 (tamanho do subgrupo sugerido para a construção dessa carta de controle), que corresponde ao valor de 0,577, ou seja, $A_{2} = 0,577$, não difere muito do valor calculado abaixo, bem como os limites de controle calculados com o valor tabelado não diferem muito dos gráficos apresentados. Visto isso, sejam as equações:
+Os gráficos de controle em (a) contém um erro no LIC, e a quantidade 2$\sigma$ difere em 0,001 da mesma quantidade do LSC, ainda sim não há significativa diferença ao obsevar que, o valor do coeficiente $A_{2}$ tabelado para n = 5 (tamanho do subgrupo sugerido para a construção dessa carta de controle, que corresponde ao valor de 0,577, ou seja, $A_{2} = 0,577$, não difere muito do valor calculado abaixo, bem como os limites de controle calculados com o valor tabelado não diferem muito dos gráficos apresentados. Visto isso, sejam as equações:
 
 $UCL = \bar{\bar{x}} + A_{2}*\bar{r}$
 
@@ -96,7 +96,7 @@ A_{2} = \frac{11,530 - 8,012}{6,1} = 0,57672
 \end{aligned}
 $$
 
-Outro aspecto importante é que o tamanho da amostra é maior que 30, pois o tamanho do subgrupo multiplicado pela quantidade de amostras do subgrupo dá a quantidade amostrada que é de 125, ou seja N = 125, o que se pode inferir que a distribuição pode ter comportamento normal. Dessa forma, é possível considerar que a média calculada corresponde à média da amostra.
+Outro aspecto importante é que o tamanho da amostra é maior que 30, pois o tamanho do subgrupo multiplicado pela quantidade de amostras do subgrupo dá a quantidade amostrada que é de 125, ou seja N = 125, o que se pode inferir que a distribuição pode ter comportamento normal. Dessa forma, é possível considerar que a média calculada corresponde à média da amostra de uma distribuição normal.
 
 Usando o mesmo raciocínio exposto iremos avaliar a carta apresentada em (b). Primeiramente iremos considerar a mesma tabela de coeficientes disponível na literatura. Para o subgrupo de tamanho 4, ou seja n = 4, o valor do coeficiente $A_{2}$ é como segue $A_{2} = 0,729$ dessa forma podemos considerar os mesmos cálculos realizados anteriormente, considerando que para essa carta:
 
