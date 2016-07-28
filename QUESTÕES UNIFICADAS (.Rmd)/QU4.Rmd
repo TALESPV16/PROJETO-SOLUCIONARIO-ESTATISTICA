@@ -33,6 +33,8 @@ library("survey")
 library("raster")
 library("knitr")
 library("BSDA")
+library("psych")
+library("corrplot")
 ```
 
 ##QUESTÃO QU4
@@ -88,7 +90,7 @@ b.2. Uma análise específica será realizada considerando dados com maior proba
 ####Resposta letra a.1)
 Comparaou-se os períodos seco e úmido quanto ao estado de eutrofização do rio através da avaliação dos intervalos de confiânça para as médias utilizando a distrinuição T.
 
-```{r}
+```{r, echo=FALSE}
 LI.seco <- LQQU4.2$IET.seco[LQQU4.2$Variavel=="Media"] - qt(p = 0.1/2, df = LQQU4.2$IET.seco[LQQU4.2$Variavel=="N"]-1, lower.tail = FALSE)*LQQU4.2$IET.seco[LQQU4.2$Variavel=="DP"]/sqrt(LQQU4.2$IET.seco[LQQU4.2$Variavel=="N"])
 
 LS.seco <- LQQU4.2$IET.seco[LQQU4.2$Variavel=="Media"] + qt(p = 0.1/2, df = LQQU4.2$IET.seco[LQQU4.2$Variavel=="N"]-1, lower.tail = FALSE)*LQQU4.2$IET.seco[LQQU4.2$Variavel=="DP"]/sqrt(LQQU4.2$IET.seco[LQQU4.2$Variavel=="N"])
@@ -107,7 +109,7 @@ A tabela acima mostra a sobreposição dos intervals de confiânça para o índi
 
 ####Resposta letra a.2)
 
-```{r}
+```{r, echo=FALSE}
 LI.seco.Cl <- LQQU4.2$Clorofila.seco[LQQU4.2$Variavel=="Media"] - qt(p = 0.1/2, df = LQQU4.2$Clorofila.seco[LQQU4.2$Variavel=="N"]-1, lower.tail = FALSE)*LQQU4.2$Clorofila.seco[LQQU4.2$Variavel=="DP"]/sqrt(LQQU4.2$Clorofila.seco[LQQU4.2$Variavel=="N"])
 
 LS.seco.Cl <- LQQU4.2$Clorofila.seco[LQQU4.2$Variavel=="Media"] + qt(p = 0.1/2, df = LQQU4.2$Clorofila.seco[LQQU4.2$Variavel=="N"]-1, lower.tail = FALSE)*LQQU4.2$Clorofila.seco[LQQU4.2$Variavel=="DP"]/sqrt(LQQU4.2$Clorofila.seco[LQQU4.2$Variavel=="N"])
@@ -136,14 +138,257 @@ A tabela também apresenta a não sobreposição dos intervals de confiânça pa
 
 ###Resposta letra b)
 ####Resposta letra b.1)
+```{r, echo=FALSE}
+ultra <- pnorm(q = 47,
+               mean = mean(c(LQQU4.2$IET.seco[LQQU4.2$Variavel=="Media"], LQQU4.2$IET.umido[LQQU4.2$Variavel=="Media"])),
+               sd = mean(c(LQQU4.2$IET.seco[LQQU4.2$Variavel=="DP"], LQQU4.2$IET.umido[LQQU4.2$Variavel=="DP"])),
+               lower.tail = TRUE)
+
+oligo <- pnorm(q = 52,
+               mean = mean(c(LQQU4.2$IET.seco[LQQU4.2$Variavel=="Media"], LQQU4.2$IET.umido[LQQU4.2$Variavel=="Media"])),
+               sd = mean(c(LQQU4.2$IET.seco[LQQU4.2$Variavel=="DP"], LQQU4.2$IET.umido[LQQU4.2$Variavel=="DP"])),
+               lower.tail = TRUE) - ultra
+
+meso <- pnorm(q = 59,
+              mean = mean(c(LQQU4.2$IET.seco[LQQU4.2$Variavel=="Media"], LQQU4.2$IET.umido[LQQU4.2$Variavel=="Media"])),
+              sd = mean(c(LQQU4.2$IET.seco[LQQU4.2$Variavel=="DP"], LQQU4.2$IET.umido[LQQU4.2$Variavel=="DP"])),
+              lower.tail = TRUE) - pnorm(q = 52,
+                                         mean = mean(c(LQQU4.2$IET.seco[LQQU4.2$Variavel=="Media"], LQQU4.2$IET.umido[LQQU4.2$Variavel=="Media"])),
+                                         sd = mean(c(LQQU4.2$IET.seco[LQQU4.2$Variavel=="DP"], LQQU4.2$IET.umido[LQQU4.2$Variavel=="DP"])),
+                                         lower.tail = TRUE)
+
+eu <- pnorm(q = 63,
+            mean = mean(c(LQQU4.2$IET.seco[LQQU4.2$Variavel=="Media"], LQQU4.2$IET.umido[LQQU4.2$Variavel=="Media"])),
+            sd = mean(c(LQQU4.2$IET.seco[LQQU4.2$Variavel=="DP"], LQQU4.2$IET.umido[LQQU4.2$Variavel=="DP"])),
+            lower.tail = TRUE) - pnorm(q = 59,
+                                       mean = mean(c(LQQU4.2$IET.seco[LQQU4.2$Variavel=="Media"], LQQU4.2$IET.umido[LQQU4.2$Variavel=="Media"])),
+                                       sd = mean(c(LQQU4.2$IET.seco[LQQU4.2$Variavel=="DP"], LQQU4.2$IET.umido[LQQU4.2$Variavel=="DP"])),
+                                       lower.tail = TRUE)
+
+super <- pnorm(q = 67,
+               mean = mean(c(LQQU4.2$IET.seco[LQQU4.2$Variavel=="Media"], LQQU4.2$IET.umido[LQQU4.2$Variavel=="Media"])),
+               sd = mean(c(LQQU4.2$IET.seco[LQQU4.2$Variavel=="DP"], LQQU4.2$IET.umido[LQQU4.2$Variavel=="DP"])),
+               lower.tail = TRUE) - pnorm(q = 63,
+                                          mean = mean(c(LQQU4.2$IET.seco[LQQU4.2$Variavel=="Media"], LQQU4.2$IET.umido[LQQU4.2$Variavel=="Media"])),
+                                          sd = mean(c(LQQU4.2$IET.seco[LQQU4.2$Variavel=="DP"], LQQU4.2$IET.umido[LQQU4.2$Variavel=="DP"])),
+                                          lower.tail = TRUE)
+
+hiper <- pnorm(q = 67,
+               mean = mean(c(LQQU4.2$IET.seco[LQQU4.2$Variavel=="Media"], LQQU4.2$IET.umido[LQQU4.2$Variavel=="Media"])),
+               sd = mean(c(LQQU4.2$IET.seco[LQQU4.2$Variavel=="DP"], LQQU4.2$IET.umido[LQQU4.2$Variavel=="DP"])),
+               lower.tail = FALSE)
+
+c <- matrix(round(c(ultra, oligo, meso, eu, super, hiper), digits = 3), nrow = 1, ncol = 6)
+colnames(c) <- c("Ultraoligotrófico", "Oligotrófico", "Mesotrófico", "Eutrófico", "Supertrófico", "Hipertrófico")
+rownames(c) <- c("Probabilidade")
+knitr::kable(c, align = 'c')
+```
+
+####Resposta letra b.2)
+```{r}
+
+```
+
+###Resposta letra c)
+Avaliação da correlação linear entre as variáveis:
 
 ```{r}
-47
-52
-59
-63
-67
+LQQU4.1$Epoca <- as.numeric(LQQU4.1$Epoca)
 
-ultra <- pt(q = 47, df = )
+corr.test(na.omit(LQQU4.1))
+
+cor.matrix <- cor(na.omit(LQQU4.1))
+corrplot(corr = cor.matrix, method = "number")
+```
+
+Histrogramas:
+
+```{r, echo=FALSE}
+par(mfrow = c(1,2))
+hist(x = na.omit(LQQU4.1$Clorofila[LQQU4.1$Epoca==1]),
+     main = "Histograma Clorofila - Seco",
+     ylab = "Frequência",
+     xlab = "Clorofila",
+     col  = "grey")
+hist(x = na.omit(LQQU4.1$Clorofila[LQQU4.1$Epoca==2]),
+     main = "Histograma Clorofila - Úmido",
+     ylab = "Frequência",
+     xlab = "Clorofila",
+     col  = "grey")
+
+par(mfrow = c(1,2))
+hist(x = na.omit(LQQU4.1$Celulas[LQQU4.1$Epoca==1]),
+     main = "Histograma Celulas - Seco",
+     ylab = "Frequência",
+     xlab = "Celulas",
+     col  = "lightgreen")
+hist(x = na.omit(LQQU4.1$Celulas[LQQU4.1$Epoca==2]),
+     main = "Histograma Celulas - Úmido",
+     ylab = "Frequência",
+     xlab = "Celulas",
+     col  = "lightgreen")
+
+par(mfrow = c(1,2))
+hist(x = na.omit(LQQU4.1$Turbidez[LQQU4.1$Epoca==1]),
+     main = "Histograma Turbidez - Seco",
+     ylab = "Frequência",
+     xlab = "Turbidez",
+     col  = "lightblue")
+hist(x = na.omit(LQQU4.1$Turbidez[LQQU4.1$Epoca==2]),
+     main = "Histograma Turbidez - Úmido",
+     ylab = "Frequência",
+     xlab = "Turbidez",
+     col  = "lightblue")
+
+par(mfrow = c(1,2))
+hist(x = na.omit(LQQU4.1$Fosforo[LQQU4.1$Epoca==1]),
+     main = "Histograma Fosforo - Seco",
+     ylab = "Frequência",
+     xlab = "Fosforo",
+     col  = "red")
+hist(x = na.omit(LQQU4.1$Fosforo[LQQU4.1$Epoca==2]),
+     main = "Histograma Fosforo - Úmido",
+     ylab = "Frequência",
+     xlab = "Fosforo",
+     col  = "red")
+
+par(mfrow = c(1,2))
+hist(x = na.omit(LQQU4.1$pH[LQQU4.1$Epoca==1]),
+     main = "Histograma pH - Seco",
+     ylab = "Frequência",
+     xlab = "pH",
+     col  = "yellow")
+hist(x = na.omit(LQQU4.1$pH[LQQU4.1$Epoca==2]),
+     main = "Histograma pH - Úmido",
+     ylab = "Frequência",
+     xlab = "pH",
+     col  = "yellow")
+
+par(mfrow = c(1,2))
+hist(x = na.omit(LQQU4.1$DBO5[LQQU4.1$Epoca==1]),
+     main = "Histograma DBO5 - Seco",
+     ylab = "Frequência",
+     xlab = "DBO5",
+     col  = "brown")
+hist(x = na.omit(LQQU4.1$DBO5[LQQU4.1$Epoca==2]),
+     main = "Histograma DBO5 - Úmido",
+     ylab = "Frequência",
+     xlab = "DBO5",
+     col  = "brown")
+
+par(mfrow = c(1,2))
+hist(x = na.omit(LQQU4.1$OD[LQQU4.1$Epoca==1]),
+     main = "Histograma OD - Seco",
+     ylab = "Frequência",
+     xlab = "OD",
+     col  = "orange")
+hist(x = na.omit(LQQU4.1$OD[LQQU4.1$Epoca==2]),
+     main = "Histograma OD - Úmido",
+     ylab = "Frequência",
+     xlab = "OD",
+     col  = "orange")
+
+par(mfrow = c(1,2))
+hist(x = na.omit(LQQU4.1$IET[LQQU4.1$Epoca==1]),
+     main = "Histograma IET - Seco",
+     ylab = "Frequência",
+     xlab = "IET",
+     col  = "green")
+hist(x = na.omit(LQQU4.1$IET[LQQU4.1$Epoca==2]),
+     main = "Histograma IET - Úmido",
+     ylab = "Frequência",
+     xlab = "IET",
+     col  = "green")
+
+```
+
+Boxplots:
+
+```{r, echo=FALSE}
+par(mfrow = c(1,2))
+boxplot(x = na.omit(LQQU4.1$Clorofila[LQQU4.1$Epoca==1]),
+     main = "Histograma Clorofila - Seco",
+     xlab = "Clorofila",
+     col  = "grey")
+boxplot(x = na.omit(LQQU4.1$Clorofila[LQQU4.1$Epoca==2]),
+     main = "Histograma Clorofila - Úmido",
+     xlab = "Clorofila",
+     col  = "grey")
+
+par(mfrow = c(1,2))
+boxplot(x = na.omit(LQQU4.1$Celulas[LQQU4.1$Epoca==1]),
+     main = "Histograma Celulas - Seco",
+     xlab = "Celulas",
+     col  = "lightgreen")
+boxplot(x = na.omit(LQQU4.1$Celulas[LQQU4.1$Epoca==2]),
+     main = "Histograma Celulas - Úmido",
+     xlab = "Celulas",
+     col  = "lightgreen")
+
+par(mfrow = c(1,2))
+boxplot(x = na.omit(LQQU4.1$Turbidez[LQQU4.1$Epoca==1]),
+     main = "Histograma Turbidez - Seco",
+     xlab = "Turbidez",
+     col  = "lightblue")
+boxplot(x = na.omit(LQQU4.1$Turbidez[LQQU4.1$Epoca==2]),
+     main = "Histograma Turbidez - Úmido",
+     xlab = "Turbidez",
+     col  = "lightblue")
+
+par(mfrow = c(1,2))
+boxplot(x = na.omit(LQQU4.1$Fosforo[LQQU4.1$Epoca==1]),
+     main = "Histograma Fosforo - Seco",
+     xlab = "Fosforo",
+     col  = "red")
+boxplot(x = na.omit(LQQU4.1$Fosforo[LQQU4.1$Epoca==2]),
+     main = "Histograma Fosforo - Úmido",
+     xlab = "Fosforo",
+     col  = "red")
+
+par(mfrow = c(1,2))
+boxplot(x = na.omit(LQQU4.1$pH[LQQU4.1$Epoca==1]),
+     main = "Histograma pH - Seco",
+     xlab = "pH",
+     col  = "yellow")
+boxplot(x = na.omit(LQQU4.1$pH[LQQU4.1$Epoca==2]),
+     main = "Histograma pH - Úmido",
+     xlab = "pH",
+     col  = "yellow")
+
+par(mfrow = c(1,2))
+boxplot(x = na.omit(LQQU4.1$DBO5[LQQU4.1$Epoca==1]),
+     main = "Histograma DBO5 - Seco",
+     xlab = "DBO5",
+     col  = "brown")
+boxplot(x = na.omit(LQQU4.1$DBO5[LQQU4.1$Epoca==2]),
+     main = "Histograma DBO5 - Úmido",
+     xlab = "DBO5",
+     col  = "brown")
+
+par(mfrow = c(1,2))
+boxplot(x = na.omit(LQQU4.1$OD[LQQU4.1$Epoca==1]),
+     main = "Histograma OD - Seco",
+     xlab = "OD",
+     col  = "orange")
+boxplot(x = na.omit(LQQU4.1$OD[LQQU4.1$Epoca==2]),
+     main = "Histograma OD - Úmido",
+     xlab = "OD",
+     col  = "orange")
+
+par(mfrow = c(1,2))
+boxplot(x = na.omit(LQQU4.1$IET[LQQU4.1$Epoca==1]),
+     main = "Histograma IET - Seco",
+     xlab = "IET",
+     col  = "green")
+boxplot(x = na.omit(LQQU4.1$IET[LQQU4.1$Epoca==2]),
+     main = "Histograma IET - Úmido",
+     xlab = "IET",
+     col  = "green")
+```
+
+Seleção das variáveis e construção do modelo
+
+```{r}
+
 ```
 
