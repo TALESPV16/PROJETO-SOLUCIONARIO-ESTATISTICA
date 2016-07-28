@@ -386,9 +386,66 @@ boxplot(x = na.omit(LQQU4.1$IET[LQQU4.1$Epoca==2]),
      col  = "green")
 ```
 
-Seleção das variáveis e construção do modelo
+Seleção das variáveis e construção do modelo:
 
 ```{r}
+LQQU4.1 <- na.omit(LQQU4.1)
 
+modelo <- lm(IET ~ Epoca + Clorofila + Celulas + Turbidez + Fosforo + pH + DBO5 + OD, data = LQQU4.1)
+step <- stepAIC(object = modelo, direction = "both")
+step$anova
+
+modelo.QU4<- lm(IET ~ Clorofila + Turbidez + pH, data = LQQU4.1)
+summary(modelo.QU4)
 ```
+
+Validação do modelo linear:
+
+```{r}
+plot(x = LQQU4.1$IET, 
+     y = modelo.QU4$fitted.values,
+     xlab = "Valores observados",
+     ylab = "Valores preditos",
+     pch = 16)
+abline(a = 0, b = 1, lty = 2, col = "red")
+
+par(mfrow = c(2,2))
+plot(x = LQQU4.1$IET, 
+     y = modelo.QU4$residuals,
+     xlab = "IET",
+     ylab = "Resíduos",
+     pch = 16,
+     col = "red")
+plot(x = LQQU4.1$Clorofila, 
+     y = modelo.QU4$residuals,
+     xlab = "Clorofila",
+     ylab = "Resíduos",
+     pch = 16,
+     col = "green")
+plot(x = LQQU4.1$Turbidez, 
+     y = modelo.QU4$residuals,
+     xlab = "Turbidez",
+     ylab = "Resíduos",
+     pch = 16,
+     col = "brown")
+plot(x = LQQU4.1$pH, 
+     y = modelo.QU4$residuals,
+     xlab = "pH",
+     ylab = "Resíduos",
+     pch = 16,
+     col = "blue")
+
+par(mfrow = c(1,1))
+hist(x = modelo.QU4$residuals,
+     xlab = "Resíduos",
+     ylab = "Densidade de Probabilidade",
+     main = "",
+     col = "lightgreen",
+     probability = TRUE)
+lines(density(modelo.QU4$residuals))
+
+shapiro.test(modelo.QU4$residuals)
+```
+
+A validação do modelo demonstrou que as considerações necessárias para o método dos mínimos quadrados não foram atendidas. Uma análise descritiva dos dados objetivando a identificação e avaliação da remoção de outliers se faz necessária, a fim de garantir a aleatoriedade e nomalidade dos dados e dos resíduos do modelo proposto.  
 
