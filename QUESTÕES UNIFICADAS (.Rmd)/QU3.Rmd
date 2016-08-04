@@ -1,7 +1,9 @@
 ---
-output: 
-  html_document: 
+output:
+  html_document:
     toc_depth: 6
+  pdf_document:
+    toc_depth: '6'
 ---
 #QUESTÕES UNIFICADAS
 ```{r, include=FALSE}
@@ -133,9 +135,10 @@ lines.default(rep(0, 9000), col = "black")
 d.2. Proponha um algoritmo para construção de um modelo de regressão multivariado. Considere que variações na temperatura ambiente, pressão na linha de distribuição e percentual de condensado na linha podem causar variações na perda de vapor. Considere a possibilidade de existir diferentes padrões por turno de produção (7-15h, 15-23h, 23-07h), relações não lineares, correlação entre variáveis preditoras, valores aberrantes, etc.
 
 ###Resposta letra a)
-```{r}
-# Estimativa do intervalo de confiânça para média e variância para o conjunto total de dados de perda de vapor (%).
 
+Estimativa do intervalo de confiânça para média e variância para o conjunto total de dados de perda de vapor (%).
+
+```{r}
 n         <- nrow(LQQU3)
 xbarra    <- mean(LQQU3$Perda)
 sd.perda  <- sd(LQQU3$Perda)
@@ -145,8 +148,8 @@ alpha = 0.05
 LI.mu.perda <- xbarra - qt(p = alpha/2, df = n-1, lower.tail = FALSE)*sd.perda/sqrt(n)
 LS.mu.perda <- xbarra + qt(p = alpha/2, df = n-1, lower.tail = FALSE)*sd.perda/sqrt(n)
 
-LI.var.perda <- ((n-1)*sd.perda^2)/qchisq(0.95, df = n-1, lower.tail = TRUE)
-LS.var.perda <- ((n-1)*sd.perda^2)/qchisq(0.05, df = n-1, lower.tail = TRUE)
+LI.var.perda <- ((n-1)*sd.perda^2)/qchisq(1-alpha/2, df = n-1, lower.tail = TRUE)
+LS.var.perda <- ((n-1)*sd.perda^2)/qchisq(alpha/2, df = n-1, lower.tail = TRUE)
 
 a <- matrix(c(LI.mu.perda, LS.mu.perda, LI.var.perda, LS.var.perda), nrow = 2, ncol = 2)
 colnames(a) <- c("Média", "Variância")
@@ -156,9 +159,9 @@ knitr::kable(a, align = 'c')
 shapiro.test(LQQU3$Perda)
 ```
 
-```{r}
-# Estimativa do intervalo de confiânça para média e variância para o conjunto de dados de perda de vapor (%) sem outliers.
+Estimativa do intervalo de confiânça para média e variância para o conjunto de dados de perda de vapor (%) sem outliers.
 
+```{r}
 n         <- nrow(LQQU3.1)
 xbarra    <- mean(LQQU3.1$Perda)
 sd.perda  <- sd(LQQU3.1$Perda)
@@ -168,8 +171,8 @@ alpha = 0.05
 LI.mu.perda <- xbarra - qt(p = alpha/2, df = n-1, lower.tail = FALSE)*sd.perda/sqrt(n)
 LS.mu.perda <- xbarra + qt(p = alpha/2, df = n-1, lower.tail = FALSE)*sd.perda/sqrt(n)
 
-LI.var.perda <- ((n-1)*sd.perda^2)/qchisq(0.95, df = n-1, lower.tail = TRUE)
-LS.var.perda <- ((n-1)*sd.perda^2)/qchisq(0.05, df = n-1, lower.tail = TRUE)
+LI.var.perda <- ((n-1)*sd.perda^2)/qchisq(1-alpha/2, df = n-1, lower.tail = TRUE)
+LS.var.perda <- ((n-1)*sd.perda^2)/qchisq(alpha/2, df = n-1, lower.tail = TRUE)
 
 a <- matrix(c(LI.mu.perda, LS.mu.perda, LI.var.perda, LS.var.perda), nrow = 2, ncol = 2)
 colnames(a) <- c("Média (sem outlier)", "Variância (sem outlier)")
@@ -185,27 +188,25 @@ Estimou-se as estatísticas descritivas de média e variância dos dados referen
 A probabilidade que a amostra original de dados de perda de vapor em % tenha perda superior a 25% é:
 
 ```{r}
-round(pnorm(q = 25, mean = mean(LQQU3$Perda), sd = sd(LQQU3$Perda), lower.tail = FALSE), digits = 3)
+pt(q = 25, df = length(LQQU3$Perda)-1, lower.tail = FALSE)
 ```
 
 Já a probabilidade que a amostra sem a presença do outlier tenha perda superior a 25% é:
 
 ```{r}
-round(pnorm(q = 25, mean = mean(LQQU3.1$Perda), sd = sd(LQQU3.1$Perda), lower.tail = FALSE), digits = 3)
+pt(q = 25, df = length(LQQU3.1$Perda)-1, lower.tail = FALSE)
 ```
 
 Considerando a amostra original, a perda de vapor para que 95% da perda seja inferior a 25% é:
 
 ```{r}
-Z0 <- qnorm(p = 0.95)
-round(Z0*(sd(LQQU3$Perda)/sqrt(nrow(LQQU3)))+mean(LQQU3$Perda), digits = 3)
+-((qt(p = 0.95, df = 45, lower.tail = TRUE)*sd(LQQU3$Perda))/sqrt(length(LQQU3$Perda)-1) - mean(LQQU3$Perda))
 ```
 
 Considerando a amostra sem a presença de outliers, a perda de vapor para que 95% da perda seja inferior a 25% é:
 
 ```{r}
-Z0 <- qnorm(p = 0.95)
-round(Z0*(sd(LQQU3.1$Perda)/sqrt(nrow(LQQU3.1)))+mean(LQQU3.1$Perda), digits = 3)
+-((qt(p = 0.95, df = 44, lower.tail = TRUE)*sd(LQQU3.1$Perda))/sqrt(length(LQQU3.1$Perda)-1) - mean(LQQU3.1$Perda))
 ```
 
 ###Resposta letra c)
@@ -214,18 +215,18 @@ round(Z0*(sd(LQQU3.1$Perda)/sqrt(nrow(LQQU3.1)))+mean(LQQU3.1$Perda), digits = 3
 Considerando a amostra original de dados de perdad de vapor em %, o tamanho da amostra necessário para a cosntrução de um intervalo com 95% de confiânça e com erro inferior a 0,5% é:
 
 ```{r}
-erro <- 0.5
-n    <- ((qnorm(p = 0.05/2, lower.tail = TRUE)*sd(LQQU3$Perda))/erro)^2
+e <- 0.5
 
+n <- ((qt(p = 0.05/2, df = 45, lower.tail = TRUE)*sd(LQQU3$Perda))/e)^2
 print(round(n))
 ```
 
 Se considerarmos a amostra sem a presença de outliers, o tamanho da amostra necessário para a cosntrução de um intervalo com 95% de confiânça e com erro inferior a 0,5% é:
 
 ```{r}
-erro <- 0.5
-n    <- ((qnorm(p = 0.05/2, lower.tail = TRUE)*sd(LQQU3.1$Perda))/erro)^2
+e <- 0.5
 
+n <- ((qt(p = 0.05/2, df = 45, lower.tail = TRUE)*sd(LQQU3.1$Perda))/e)^2
 print(round(n))
 ```
 
@@ -235,17 +236,8 @@ Nota-se a redução significativa do tamanho de amostra necessário com a retira
 Com o objetivo de verificar a necessidade de alteração do procedimento realizou-se testes de hipótese para a média dos conjuntos de dados com e sem outliers.
 
 ```{r}
-z.test(x = LQQU3$Perda,
-       sigma.x = sd(LQQU3$Perda),
-       mu = 18,
-       alternative = "less",
-       conf.level = 0.95)
-
-z.test(x = LQQU3.1$Perda,
-       sigma.x = sd(LQQU3$Perda),
-       mu = 18,
-       alternative = "less",
-       conf.level = 0.95)
+t.test(x = LQQU3$Perda, alternative = "less", mu = 18, conf.level = 0.95)
+t.test(x = LQQU3.1$Perda, alternative = "less", mu = 18, conf.level = 0.95)
 ```
 
 Realizou-se um teste Z para avaliar se a perda média de vapor da unidade é inferior a 18%. Os testes foram realizados considerando os dados com e sem a presença de outliers.
@@ -257,20 +249,11 @@ Já o teste Z, para o conjunto de dados sem outliers, rejeitou a hipótese nula 
 Construiu-se o código abaixo para avaliar a influência da alteração do nível de confiança para 99% sobre os erros do tipo 1 para este sistema.
 
 ```{r}
-z.test(x = LQQU3$Perda,
-       sigma.x = sd(LQQU3$Perda),
-       mu = 18,
-       alternative = "less",
-       conf.level = 0.99)
-
-z.test(x = LQQU3.1$Perda,
-       sigma.x = sd(LQQU3$Perda),
-       mu = 18,
-       alternative = "less",
-       conf.level = 0.99)
+t.test(x = LQQU3$Perda, alternative = "less", mu = 18, conf.level = 0.99)
+t.test(x = LQQU3.1$Perda, alternative = "less", mu = 18, conf.level = 0.99)
 ```
 
-O aumento do nível de confiânça (diminuição do nível de significância alpha) torna inviável a rejeição da hipótese nula na qual a perda de vapor é igual a 18% para ambos os casos (com e sem outlier). Isso significa que, com base na teoria de teste de hipótese, é necessário alterar este procedimento, pois a média verdadeira da perda de vapor não será inferior a 18% em 99% das amostragens.
+O aumento do nível de confiânça (diminuição do nível de significância alpha) torna inviável a rejeição da hipótese nula na qual a perda de vapor é igual a 18% para ambos os casos (com e sem outlier). Isso significa que, com base na teoria de teste de hipótese, é necessário alterar este procedimento, pois a média verdadeira da perda de vapor não será inferior a 18% em 99% das amostragens. Uma alternativa seria aumentar número de amostras buscando reduzir o intervalo de confiança.
 
 ###Resposta letra d)
 #### d.1)
