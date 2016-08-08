@@ -42,7 +42,7 @@ a) Estime os limites de controle para X-barra e R.
 
 b) Estime o desvio padrão deste processo. Com base na carta de controle (X-barra) abaixo, verifique se este valor estimado representa a variabiliade do processo (**justifique sua resposta)**.
 
-**Adicionar a imagem da questão!**
+![](CEP5.JPG)
 
 ###Resposta letra a)
 Para estimar os limites da carta de controle x-barra e R são usadas as equações abaixo:
