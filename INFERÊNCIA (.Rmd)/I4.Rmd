@@ -40,6 +40,18 @@ Dado que a expressão para o tamanho da amostra para a proporção $\pi$ é $n =
 a) Escreva detalhadamente como maximizar n se o parâmetro $\pi$ é desconhecido? Lembre-se: $\pi$ é a proporção da população.
 
 ###Resposta letra a)
+Derivando a equação fornecida e igualando o resultado da derivada a zero é possível maximizar o tamanho da amostra (n). Abaixo encontra-se um gráfico que ilustra a variação do damanho da amostra em função da proporção (p) para um determinado nível de significancia (alpha) e erro. Naturalmente, a diminuição do erro e diminuição do nível de significância provocam o aumento do tamanho da amostra. O resultado da derivada da equação de tamanho da amostra para a proporção que maximiza **n** é 0.5.
+
 ```{r}
-print("A resolução está na execução da primeira derivada desta função, e então obtém-se o valor máximo desta função.")
+alpha   <- 0.05
+Z.alpha <- qnorm(p = alpha/2, lower.tail = FALSE)
+erro    <- 0.2
+p       <- seq(from = 0, to = 1, by = 0.1)
+n       <- ((Z.alpha/erro)^2)*p*(1-p)
+
+plot(x = p,
+     y = n,
+     col = "blue",
+     type = "l")
+points(x = p, y = n, pch = 16)
 ```
