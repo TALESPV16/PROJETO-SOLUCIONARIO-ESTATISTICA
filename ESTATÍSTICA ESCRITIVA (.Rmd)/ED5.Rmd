@@ -41,7 +41,7 @@ Séries históricas de produção de petroquímicos e vazão de efluentes orgân
 setwd(paste(getwd(),"/DBED",sep=""))
 ```
 
-!(LQED5.png)
+![Séries históricas de produção de petroquímicos e vazão de efluentes orgânicos](ED5.JPG)
 
 ```{r, echo=FALSE}
 setwd("../")
