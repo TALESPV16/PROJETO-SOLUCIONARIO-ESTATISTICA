@@ -157,4 +157,4 @@ colnames(tabela) <- LQQU1.2$Amostra
 knitr::kable(tabela, align = 'c')
 ```
 
-O processo...
+O processo encontra-se sob controle pois a probabilidade dos valores médios em das observações em intervalos de quatro horas é inferior a 30% para todos os intervalos. 
