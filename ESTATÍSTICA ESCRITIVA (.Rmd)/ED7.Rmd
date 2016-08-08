@@ -35,7 +35,11 @@ library("knitr")
 ```
 
 ## QUESTÃO ED7
-Uma determinada empresa química faz uso de água superficial e de poços no seu processo produtivo, o qual inclui a operação de três plantas (figura 1). Um indicador do consumo de água (ICA) foi construído considerando a relação entre captação total de água (ou consumo de água) e produção total. 
+Uma determinada empresa química faz uso de água superficial e de poços no seu processo produtivo, o qual inclui a operação de três plantas (figura 1). Um indicador do consumo de água (ICA) foi construído considerando a relação entre captação total de água (ou consumo de água) e produção total.
+
+![Figura 1: Balanço hídrico.](ED7.BALANCOHIDRICO.JPG)
+
+![Figura 2: Gráficos de dispersão da produção de captação de água total (a) e por tipo de água (b).](ED7.DISPERSAO.JPG)
 
 a) Analise criticamente qual a influência da variabilidade dos dados no indicador, considerando as figuras 2 (a) e (b).
 
