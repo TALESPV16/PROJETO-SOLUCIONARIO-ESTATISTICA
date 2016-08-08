@@ -86,7 +86,7 @@ dias.inferiores <- z < -2
 DiasInferiores  <- sum(dias.inferiores)/length(LQED2$NumAcidDia)*100
 
 dias.superiores <- z > 1.5
-DiasSuperiores  <-sum(dias.superiores)/length(LQED2$NumAcidDia)*100
+DiasSuperiores  <- sum(dias.superiores)/length(LQED2$NumAcidDia)*100
 
 knitr::kable(data.frame(DiasInferiores, DiasSuperiores), align = 'c')
 ```
