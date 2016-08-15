@@ -38,7 +38,7 @@ library("FrF2")
 ##QUESTÃO CEP3
 Dois gráficos de controle (a) e (b) foram construídos considerando dados de subgrupos de tamanho 5 e 4, respectivamente.
 
-**Adicionar imagens da questão!**
+![](CEP3.JPG)
 
 a) Analise criticamente estes gráficos de controle e discuta se eles poderiam ser utilizados para o acompanhamento de processos.
 
