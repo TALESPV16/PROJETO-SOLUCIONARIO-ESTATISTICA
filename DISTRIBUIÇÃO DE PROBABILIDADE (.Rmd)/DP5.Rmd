@@ -6,7 +6,8 @@ b) Determinar a probabilidade de um estudante alcançar um rendimento maior que 
 
 ###Resposta letra a)
 
-*Usando o escore z(variável reduzida) abaixo podemos calcular:*
+Usando o escore z(variável reduzida) abaixo podemos calcular:
+
 $$
 \begin{aligned} \label{eq1}
 z = \frac{(x_{i}-\mu_{0})}{\sigma} 
@@ -40,5 +41,4 @@ A <- data.frame(A)
 (A)
 ```
 
-*Onde o desvio padrão $\sigma$ = 20 e a média é $\mu$ = 72*
-\newpage
+Onde o desvio padrão $\sigma$ = 20 e a média é $\mu$ = 72

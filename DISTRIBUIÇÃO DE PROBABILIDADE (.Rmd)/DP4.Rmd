@@ -14,7 +14,8 @@ stdt <- 8
 zA <- (yr - tmedioA)/stdt
 pnorm(zA)*100
 ```
-*A probabilidade é de para 20 unidades de força de 86,97%*
+
+A probabilidade é de para 20 unidades de força de 86,97%
 
 ###Resposta letra b)
 ```{r}
@@ -25,7 +26,8 @@ stdt <- 8
 zB <- (yr - tmedioB)/stdt
 pnorm(zB)*100
 ```
-*A probabilidade é de para 25 unidades de força de 96,96%*
+
+A probabilidade é de para 25 unidades de força de 96,96%
 
 ###Resposta letra c)
 
@@ -37,7 +39,4 @@ hist(rnorm(100,tmedioA, stdt), col = "lightblue",
      main = "Tempo de Falha para Força = 20uN")
 hist(rnorm(100,tmedioB, stdt), col = "lightblue",
      xlab = "Tempo de falha", 
-     main = "Tempo de Falha para Força = 25uN")
-```
-
-\newpage
+     main = "Tempo de Falha para Força = 25uN")```

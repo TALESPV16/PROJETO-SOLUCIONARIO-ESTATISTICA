@@ -22,7 +22,8 @@ polygon(x = c(49.75, seq(49.75, 50.25, l = 100)),
 integrate(f2, 49.75, 50.25)
 ```
 
-*Proporção de barras que estão fora as especificações*
+Proporção de barras que estão fora as especificações
+
 ```{r}
 (popc <- 1 - integrate(f2, 49, 50)$value)
 ```
@@ -33,7 +34,8 @@ integrate(f2, 49.75, 50.25)
 f <- function(x) abs(0.10 - integrate(f2, 0, x)$value)
 (resp <- optimise(f2, c(49.75, 50.25)))
 ```
-*Em 90% dos pacotes contém: 49.74993*
+
+Em 90% dos pacotes contém: 49.74993
 
 ###Resposta letra c)
 ```{r}
@@ -43,5 +45,3 @@ Stddev <- sd(graph$x)
 data <- rbind(media, variancia, Stddev)
 data.frame(data)
 ```
-
-\newpage

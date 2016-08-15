@@ -12,6 +12,7 @@ x = 100
 z = (100 - 120)/15
 (pnorm(z)*100)
 ```
+
 A probabilidade é de 9.12 % aproximadamente.
 
 ###Resposta letra b)
@@ -23,6 +24,4 @@ z <- qnorm(p)
 x <- sdv*z + meanv
 ```
 
-*O tempo deve ser de 144,6 min.*
-
-\newpage
+O tempo deve ser de 144,6 min.

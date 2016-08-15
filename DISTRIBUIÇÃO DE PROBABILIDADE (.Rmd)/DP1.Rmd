@@ -17,10 +17,8 @@ plot(f1,2.3,2.8)
 polygon(x = c(2.3, seq(2.3, 2.8, l = 100)), 
         y = c(0, f1(seq(2.3, 2.8, l = 100))), density = 20)
 ```
-*A proporção fora das especificações é o valor de popc abaixo*
-```{r}
-(popc <- 1 - integrate(f1, 2.25, 2.75)$value)
-```
 
- 
-\newpage
+A proporção fora das especificações é o valor de popc abaixo
+
+```{r}
+(popc <- 1 - integrate(f1, 2.25, 2.75)$value)```
