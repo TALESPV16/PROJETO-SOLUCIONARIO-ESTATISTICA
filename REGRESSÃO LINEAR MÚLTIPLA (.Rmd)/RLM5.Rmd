@@ -42,4 +42,4 @@ b) Como definir o domínio de aplicação de um modelo de regressão linear? Jus
 Na previsão de novas observações e na estimação da resposta média de um dado ponto, deve-se ser cuidadoso na extrapolção além da região contendo as observações originais, pois é possível que um modelo que se ajuste de forma adequada na região dos dados originais, não se ajuste de forma satisfatória fora daquela faixa.
 
 ###Resposta letra b)
-
+É prudente que o domínio de aplicação de um modelo de regressão linear seja limitado pelo conjunto de dados geradores do modelo de regressão. Isso não quer dizer que o modelo de regressão não possa ser extrapolado, sobretudo para aplicações práticas.
