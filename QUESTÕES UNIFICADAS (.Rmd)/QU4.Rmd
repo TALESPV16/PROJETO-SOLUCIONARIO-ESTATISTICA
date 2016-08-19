@@ -185,8 +185,9 @@ knitr::kable(c, align = 'c')
 ```
 
 ####Resposta letra b.2)
+Considerando que os dados de IET seguem uma distribuição normal, temos:
 ```{r}
-
+qnorm(p = 0.8, mean = mean(LQQU4.1$IET), sd = sd(LQQU4.1$IET))
 ```
 
 ###Resposta letra c)
