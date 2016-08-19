@@ -40,6 +40,17 @@ Deseja-se estimar o intervalo de confiança da proporção de um experimento. Co
 a) Indique como a pesquisa deveria ser realizada em campo de forma a minimizar o uso dos recursos financeiros, garantindo um nível de confiança de 90%.
 
 ###Resposta letra a
-```{r}
+Para que a pesquisa seja realizada de forma a minimizar o custo de coleta de dados, se faz necessário realizar a penas uma visita ao campo para coleta de dados. Assim, o tamamnho dessa única amostra deve ser maximizado através do cálculo da derivada da equação do tamanho da amostra para uma proporção (desconhecida) e o resultado deve ser igualado a zero. O resultado da derivada da equação de tamanho da amostra para a proporção que maximiza n é 0.5, e o tamanho da amostra é de aproximadamente 17.
 
+```{r}
+alpha <- 0.1
+Z.alpha <- qnorm(p = alpha/2, lower.tail = FALSE)
+erro <- 0.2
+p <- seq(from = 0, to = 1, by = 0.1)
+n <- ((Z.alpha/erro)^2)*p*(1-p)
+plot(x = p,
+y = n,
+col = "blue",
+type = "l")
+points(x = p, y = n, pch = 16)
 ```
